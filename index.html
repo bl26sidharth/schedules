@@ -4,756 +4,457 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="CR-A3">
-<meta name="theme-color" content="#0a0a0f">
+<meta name="theme-color" content="#f5f5f0">
 <title>CR-A3 · PGP BL07 Term I</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0f;
-  --surface: #13131a;
-  --surface2: #1c1c26;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0f0f5;
-  --muted: #6b6b80;
-  --dim: #3a3a4a;
-
-  --cft:   #7c6af5;
-  --ome:   #f5856a;
-  --dam:   #5aafea;
-  --mppo:  #f07ab5;
-  --mm:    #f5c46a;
-  --efaac: #6ad89a;
-  --fob:   #a0a0b8;
-  --exam:  #f56a6a;
-  --ws:    #a78bfa;
+  --bg:       #f5f5f0;
+  --surface:  #ffffff;
+  --surface2: #efefea;
+  --border:   rgba(0,0,0,0.08);
+  --border2:  rgba(0,0,0,0.14);
+  --text:     #111111;
+  --muted:    #888888;
+  --dim:      #bbbbbb;
+  --cft:    #5b4fcf; --cft-bg: #eeedfb; --cft-b:  rgba(91,79,207,0.35);
+  --ome:    #c94f2a; --ome-bg: #fdf0ec; --ome-b:  rgba(201,79,42,0.35);
+  --dam:    #1a6faa; --dam-bg: #e8f3fb; --dam-b:  rgba(26,111,170,0.35);
+  --mppo:   #b83d7e; --mppo-bg:#fceef6; --mppo-b: rgba(184,61,126,0.35);
+  --mm:     #9a6a00; --mm-bg:  #fdf6e3; --mm-b:   rgba(154,106,0,0.35);
+  --efaac:  #2a7a50; --efaac-bg:#e8f7ef;--efaac-b:rgba(42,122,80,0.35);
+  --fob:    #555566; --fob-bg: #f0f0f4; --fob-b:  rgba(85,85,102,0.35);
+  --exam:   #b83232; --exam-bg:#fdeaea; --exam-b: rgba(184,50,50,0.35);
+  --ws:     #6b3fb5; --ws-bg:  #f2edfb; --ws-b:   rgba(107,63,181,0.35);
 }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--bg); color:var(--text); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; min-height:100vh; overflow-x:hidden; }
+.app { max-width:430px; margin:0 auto; padding:0 0 5rem; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* HEADER */
+header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:linear-gradient(to bottom,var(--bg) 85%,transparent); z-index:10; }
+.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.1rem; }
+.tag { font-size:10px; font-weight:500; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; }
+.class-badge { font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--cft); border:1.5px solid var(--cft-b); padding:4px 10px; border-radius:20px; background:var(--cft-bg); }
+.date-display { margin-bottom:1rem; }
+.date-day  { font-size:24px; font-weight:700; line-height:1.15; letter-spacing:-0.02em; color:var(--text); }
+.date-year { font-size:12px; font-weight:400; color:var(--muted); margin-top:3px; }
 
-html, body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Syne', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* TAB BAR */
+.tab-bar { display:flex; gap:6px; padding:0 1.25rem; margin-bottom:1.25rem; }
+.tab-btn { flex:1; height:36px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.tab-btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+.tab-btn:active { transform:scale(0.97); }
 
-/* ── NOISE TEXTURE ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
+/* DAY NAV */
+.day-nav { display:flex; gap:6px; align-items:center; }
+.nav-btn { background:var(--surface); border:1px solid var(--border2); color:var(--text); font-size:15px; width:40px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.nav-btn:active { background:var(--surface2); transform:scale(0.96); }
+.today-btn { flex:1; background:var(--surface); border:1px solid var(--border2); color:var(--muted); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; font-weight:500; letter-spacing:0.09em; height:36px; border-radius:8px; cursor:pointer; text-transform:uppercase; }
+.today-btn:active { background:var(--surface2); }
 
-.app { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: 0 0 6rem; }
+/* PROGRESS */
+.progress-wrap { padding:0 1.25rem; margin-bottom:1.25rem; }
+.progress-label { display:flex; justify-content:space-between; font-size:10px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.progress-track { height:3px; background:var(--surface2); border-radius:2px; overflow:hidden; }
+.progress-fill  { height:100%; background:linear-gradient(90deg,var(--cft),var(--efaac)); border-radius:2px; transition:width 0.6s ease; }
 
-/* ── HEADER ── */
-header {
-  padding: 3rem 1.25rem 1.5rem;
-  position: sticky;
-  top: 0;
-  background: linear-gradient(to bottom, var(--bg) 80%, transparent);
-  z-index: 10;
-}
+/* STATS */
+.stats-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:0 1.25rem; margin-bottom:1.5rem; }
+.stat-card  { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 8px; text-align:center; }
+.stat-val   { font-size:18px; font-weight:700; letter-spacing:-0.02em; line-height:1; }
+.stat-val.small { font-size:11px; padding-top:3px; line-height:1.4; letter-spacing:0; font-weight:600; }
+.stat-label { font-size:9px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:4px; }
 
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.25rem;
-}
+/* SCHEDULE */
+.schedule { padding:0 1.25rem; }
+.section-label { font-size:10px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.75rem; }
+.slot { display:flex; gap:10px; margin-bottom:7px; align-items:stretch; }
+.time-col { width:68px; flex-shrink:0; display:flex; flex-direction:column; align-items:flex-end; padding-top:11px; }
+.time-start    { font-size:11px; font-weight:600; color:var(--muted); line-height:1; }
+.time-ampm     { font-size:9px;  font-weight:500; color:var(--dim);   line-height:1; margin-top:1px; }
+.time-end      { font-size:10px; color:var(--dim); margin-top:5px; line-height:1; }
+.time-end-ampm { font-size:9px; color:var(--dim); line-height:1; margin-top:1px; }
+.class-card { flex:1; border-radius:10px; padding:11px 13px; border-left:3px solid transparent; position:relative; animation:slideIn 0.2s ease both; }
+@keyframes slideIn { from{opacity:0;transform:translateX(6px)} to{opacity:1;transform:translateX(0)} }
+.class-code    { font-size:13px; font-weight:700; line-height:1; }
+.class-full    { font-size:11px; font-weight:400; margin-top:3px; line-height:1.35; opacity:0.75; }
+.class-faculty { font-size:10px; font-weight:500; margin-top:5px; opacity:0.55; }
+.lunch-card { flex:1; border-radius:10px; padding:10px 13px; background:var(--surface); border:1px dashed var(--border2); display:flex; align-items:center; gap:8px; }
+.lunch-dot  { width:5px; height:5px; border-radius:50%; background:var(--dim); flex-shrink:0; }
+.lunch-text { font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.03em; text-transform:uppercase; }
+.workshop-card  { flex:1; border-radius:10px; padding:11px 13px; background:var(--ws-bg); border-left:3px solid var(--ws); }
+.workshop-label { font-size:9px; font-weight:700; color:var(--ws); text-transform:uppercase; letter-spacing:0.1em; }
+.workshop-title { font-size:12px; font-weight:600; color:var(--ws); margin-top:3px; line-height:1.3; }
+.workshop-sub   { font-size:10px; color:var(--ws); opacity:0.6; margin-top:4px; }
+.exam-card { flex:1; border-radius:10px; padding:13px 14px; background:var(--exam-bg); border-left:3px solid var(--exam); }
+.exam-text { font-size:14px; font-weight:700; color:var(--exam); }
+.exam-sub  { font-size:10px; font-weight:500; color:var(--exam); opacity:0.6; margin-top:4px; text-transform:uppercase; letter-spacing:0.08em; }
+.now-badge { font-size:9px; font-weight:700; letter-spacing:0.1em; background:#111; color:#fff; padding:2px 7px; border-radius:4px; text-transform:uppercase; position:absolute; top:10px; right:10px; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.no-class      { text-align:center; padding:3rem 0; }
+.no-class-icon { font-size:28px; margin-bottom:0.75rem; color:var(--dim); }
+.no-class-text { font-size:14px; font-weight:500; color:var(--muted); }
+.no-class-sub  { font-size:11px; color:var(--dim); margin-top:5px; }
 
-.tag {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  text-transform: uppercase;
-  border: 1px solid var(--border2);
-  padding: 4px 8px;
-  border-radius: 4px;
-}
+/* LEGEND */
+.legend   { padding:1.25rem 1.25rem 0; display:flex; flex-wrap:wrap; gap:6px; }
+.leg      { display:flex; align-items:center; gap:5px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:4px 9px; }
+.leg-dot  { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.leg-text { font-size:10px; font-weight:500; color:var(--muted); }
 
-.class-badge {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--cft);
-  border: 1px solid rgba(124,106,245,0.3);
-  padding: 4px 10px;
-  border-radius: 4px;
-  background: rgba(124,106,245,0.08);
-}
+/* HOLIDAYS */
+#holidays-view { padding:0 1.25rem; }
+.holidays-header { margin-bottom:1.25rem; }
+.holidays-title  { font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--text); }
+.holidays-sub    { font-size:11px; color:var(--muted); margin-top:4px; }
+.holiday-month-label { font-size:10px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:0.12em; margin:1.25rem 0 0.6rem; }
+.holiday-item { display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:11px 13px; margin-bottom:7px; animation:slideIn 0.2s ease both; }
+.holiday-date-box { width:42px; flex-shrink:0; text-align:center; }
+.holiday-dd  { font-size:20px; font-weight:700; line-height:1; color:var(--text); letter-spacing:-0.02em; }
+.holiday-dow { font-size:9px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:2px; }
+.holiday-divider { width:1px; height:32px; background:var(--border2); flex-shrink:0; }
+.holiday-info    { flex:1; }
+.holiday-name    { font-size:13px; font-weight:600; color:var(--text); line-height:1.2; }
+.holiday-type    { font-size:10px; font-weight:500; margin-top:3px; padding:2px 7px; border-radius:10px; display:inline-block; }
+.type-national   { background:var(--exam-bg); color:var(--exam); }
+.type-free       { background:var(--dam-bg);  color:var(--dam);  }
+.type-weekend    { background:var(--fob-bg);  color:var(--fob);  }
+.holiday-count-badge { background:var(--efaac-bg); border:1px solid var(--efaac-b); color:var(--efaac); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; display:inline-block; margin-top:0.75rem; }
 
-.date-display {
-  margin-bottom: 1rem;
-}
-
-.date-day {
-  font-size: 42px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-
-.date-month {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 4px;
-  letter-spacing: 0.05em;
-}
-
-/* ── DAY NAV ── */
-.day-nav {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.nav-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 16px;
-  width: 40px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
-  flex-shrink: 0;
-}
-.nav-btn:active { background: var(--surface2); transform: scale(0.96); }
-
-.today-btn {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.15s;
-}
-.today-btn:active { background: var(--surface2); color: var(--text); }
-
-/* ── STATS ROW ── */
-.stats-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-  padding: 0 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 10px;
-  text-align: center;
-}
-
-.stat-val {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.stat-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 4px;
-}
-
-/* ── SCHEDULE LIST ── */
-.schedule { padding: 0 1.25rem; }
-
-.section-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: var(--dim);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.75rem;
-}
-
-.slot {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 8px;
-  align-items: stretch;
-}
-
-.time-col {
-  width: 68px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding-top: 14px;
-}
-
-.time-start {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1;
-}
-
-.time-end {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: var(--dim);
-  margin-top: 3px;
-  line-height: 1;
-}
-
-.class-card {
-  flex: 1;
-  border-radius: 12px;
-  padding: 12px 14px;
-  border-left: 3px solid transparent;
-  position: relative;
-  overflow: hidden;
-  animation: slideIn 0.25s ease forwards;
-}
-
-.class-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: currentColor;
-  opacity: 0.06;
-  pointer-events: none;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(8px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.class-code {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1;
-}
-
-.class-full {
-  font-size: 11px;
-  margin-top: 4px;
-  opacity: 0.65;
-  line-height: 1.3;
-}
-
-.class-prof {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  margin-top: 5px;
-  opacity: 0.5;
-}
-
-.lunch-card {
-  flex: 1;
-  border-radius: 12px;
-  padding: 10px 14px;
-  background: var(--surface);
-  border: 1px dashed var(--border2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lunch-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--dim);
-}
-
-.lunch-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-.workshop-card {
-  flex: 1;
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: rgba(167,139,250,0.08);
-  border-left: 3px solid var(--ws);
-}
-
-.workshop-code {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--ws);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.workshop-title {
-  font-size: 12px;
-  color: rgba(167,139,250,0.8);
-  margin-top: 4px;
-  line-height: 1.3;
-}
-
-.workshop-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: rgba(167,139,250,0.5);
-  margin-top: 5px;
-}
-
-.exam-card {
-  flex: 1;
-  border-radius: 12px;
-  padding: 14px 16px;
-  background: rgba(245,106,106,0.1);
-  border-left: 3px solid var(--exam);
-  border: 1px solid rgba(245,106,106,0.2);
-}
-
-.exam-text {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--exam);
-}
-
-.exam-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: rgba(245,106,106,0.5);
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.no-class {
-  text-align: center;
-  padding: 3rem 0;
-}
-
-.no-class-icon {
-  font-size: 32px;
-  margin-bottom: 0.75rem;
-  opacity: 0.4;
-}
-
-.no-class-text {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.no-class-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  margin-top: 6px;
-  letter-spacing: 0.05em;
-}
-
-/* ── LEGEND ── */
-.legend {
-  padding: 1.5rem 1.25rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.leg {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 9px;
-}
-
-.leg-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-}
-
-.leg-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-}
-
-/* ── PROGRESS BAR ── */
-.progress-wrap {
-  padding: 0 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
-.progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-
-.progress-track {
-  height: 3px;
-  background: var(--surface2);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cft), var(--ws));
-  border-radius: 2px;
-  transition: width 0.5s ease;
-}
-
-/* ── CURRENT CLASS HIGHLIGHT ── */
-.now-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  background: rgba(124,106,245,0.15);
-  color: var(--cft);
-  border: 1px solid rgba(124,106,245,0.3);
-  padding: 2px 7px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.slot-anim-0 { animation-delay: 0.00s; }
-.slot-anim-1 { animation-delay: 0.04s; }
-.slot-anim-2 { animation-delay: 0.08s; }
-.slot-anim-3 { animation-delay: 0.12s; }
-.slot-anim-4 { animation-delay: 0.16s; }
-.slot-anim-5 { animation-delay: 0.20s; }
-.slot-anim-6 { animation-delay: 0.24s; }
-.slot-anim-7 { animation-delay: 0.28s; }
+.slot-anim-0{animation-delay:0.00s} .slot-anim-1{animation-delay:0.04s} .slot-anim-2{animation-delay:0.08s}
+.slot-anim-3{animation-delay:0.12s} .slot-anim-4{animation-delay:0.16s} .slot-anim-5{animation-delay:0.20s}
+.slot-anim-6{animation-delay:0.24s} .slot-anim-7{animation-delay:0.28s}
 </style>
 </head>
 <body>
 <div class="app">
-
   <header>
     <div class="header-top">
       <span class="tag">PGP BL07 · Term I</span>
       <span class="class-badge">CR-A3</span>
     </div>
-    <div class="date-display">
-      <div class="date-day" id="date-day">—</div>
-      <div class="date-month" id="date-month">—</div>
+    <div class="date-display" id="header-date">
+      <div class="date-day"  id="date-day">—</div>
+      <div class="date-year" id="date-year">—</div>
     </div>
-    <div class="day-nav">
+    <div class="day-nav" id="day-nav-row">
       <button class="nav-btn" onclick="changeDay(-1)">←</button>
-      <button class="today-btn" onclick="goToday()">↺ TODAY</button>
+      <button class="today-btn" onclick="goToday()">↺ Today</button>
       <button class="nav-btn" onclick="changeDay(1)">→</button>
     </div>
   </header>
 
-  <div class="progress-wrap">
-    <div class="progress-label">
-      <span>Term progress</span>
-      <span id="progress-pct">—</span>
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-schedule" onclick="switchTab('schedule')">Schedule</button>
+    <button class="tab-btn" id="tab-holidays" onclick="switchTab('holidays')">Holidays</button>
+  </div>
+
+  <!-- SCHEDULE VIEW -->
+  <div id="schedule-view">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Term Progress</span><span id="progress-pct">—</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-classes" style="color:var(--cft)">—</div>
+        <div class="stat-label">Classes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val small" id="stat-hours" style="color:var(--dam)">—</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-days" style="color:var(--mm)">—</div>
+        <div class="stat-label">Days Left</div>
+      </div>
+    </div>
+    <div class="schedule">
+      <div class="section-label">Schedule</div>
+      <div id="schedule-body"></div>
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--cft)"></div><span class="leg-text">CFT-I</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--ome)"></div><span class="leg-text">OME</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--dam)"></div><span class="leg-text">DAM</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--mppo)"></div><span class="leg-text">MPPO</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--mm)"></div><span class="leg-text">MM</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--efaac)"></div><span class="leg-text">EFAAC</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--fob)"></div><span class="leg-text">FOB</span></div>
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-val" id="stat-classes" style="color:var(--cft)">—</div>
-      <div class="stat-label">classes</div>
+  <!-- HOLIDAYS VIEW -->
+  <div id="holidays-view" style="display:none">
+    <div class="holidays-header">
+      <div class="holidays-title">Free Days</div>
+      <div class="holidays-sub">Holidays &amp; no-class days in Term I</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="stat-hours" style="color:var(--dam)">—</div>
-      <div class="stat-label">hrs today</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="stat-days" style="color:var(--mm)">—</div>
-      <div class="stat-label">days left</div>
-    </div>
+    <div id="holidays-body"></div>
   </div>
-
-  <div class="schedule">
-    <div class="section-label">Schedule</div>
-    <div id="schedule-body"></div>
-  </div>
-
-  <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:var(--cft)"></div><span class="leg-text">CFT-I</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--ome)"></div><span class="leg-text">OME</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--dam)"></div><span class="leg-text">DAM</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--mppo)"></div><span class="leg-text">MPPO</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--mm)"></div><span class="leg-text">MM</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--efaac)"></div><span class="leg-text">EFAAC</span></div>
-    <div class="leg"><div class="leg-dot" style="background:var(--fob)"></div><span class="leg-text">FOB</span></div>
-  </div>
-
 </div>
 
 <script>
 const COLORS = {
-  'CFT-I':  { color: 'var(--cft)',   bg: 'rgba(124,106,245,0.1)',  border: 'rgba(124,106,245,0.6)' },
-  'OME':    { color: 'var(--ome)',   bg: 'rgba(245,133,106,0.1)',  border: 'rgba(245,133,106,0.6)' },
-  'DAM':    { color: 'var(--dam)',   bg: 'rgba(90,175,234,0.1)',   border: 'rgba(90,175,234,0.6)' },
-  'MPPO':   { color: 'var(--mppo)',  bg: 'rgba(240,122,181,0.1)',  border: 'rgba(240,122,181,0.6)' },
-  'MM':     { color: 'var(--mm)',    bg: 'rgba(245,196,106,0.1)',  border: 'rgba(245,196,106,0.6)' },
-  'EFAAC':  { color: 'var(--efaac)', bg: 'rgba(106,216,154,0.1)',  border: 'rgba(106,216,154,0.6)' },
-  'FOB':    { color: 'var(--fob)',   bg: 'rgba(160,160,184,0.1)',  border: 'rgba(160,160,184,0.6)' },
+  'CFT-I': {color:'var(--cft)', bg:'var(--cft-bg)', border:'var(--cft-b)'},
+  'OME':   {color:'var(--ome)', bg:'var(--ome-bg)', border:'var(--ome-b)'},
+  'DAM':   {color:'var(--dam)', bg:'var(--dam-bg)', border:'var(--dam-b)'},
+  'MPPO':  {color:'var(--mppo)',bg:'var(--mppo-bg)',border:'var(--mppo-b)'},
+  'MM':    {color:'var(--mm)',  bg:'var(--mm-bg)',  border:'var(--mm-b)'},
+  'EFAAC': {color:'var(--efaac)',bg:'var(--efaac-bg)',border:'var(--efaac-b)'},
+  'FOB':   {color:'var(--fob)', bg:'var(--fob-bg)', border:'var(--fob-b)'},
 };
-
 const FULL = {
-  'CFT-I':  'Communication for Transformation I',
-  'OME':    'Organization & Market Economics',
-  'DAM':    'Data Analysis & Modelling',
-  'MPPO':   'Managing People & Performance',
-  'MM':     'Marketing Management',
-  'EFAAC':  'Essentials of Financial Accounting',
-  'FOB':    'Foundations of Business',
+  'CFT-I': 'Communication for Transformation-I',
+  'OME':   'Organization & Market Economics',
+  'DAM':   'Data Analysis & Modelling',
+  'MPPO':  'Managing People & Performance in Organizations',
+  'MM':    'Marketing Management',
+  'EFAAC': 'Essentials of Financial Accounting, Analysis & Costing',
+  'FOB':   'Foundations of Business',
+};
+const FACULTY = {
+  'CFT-I': 'Prof. Deepa Sethi',
+  'OME':   'Prof. Shubhasis Dey',
+  'DAM':   'Prof. Arnab Adhikari',
+  'MPPO':  'Prof. Roopak Kumar Gupta',
+  'MM':    'Prof. Atanu Adhikari',
+  'FOB':   'Prof. Anjana Karumathil',
+};
+const NATIONAL = {
+  '2026-05-01': 'Labour Day',
+  '2026-05-09': 'Rabindra Jayanti',
+  '2026-05-24': 'Eid al-Adha (Bakrid)',
 };
 
 const SCHEDULE = [
-  {d:'2026-04-22', slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
-  {d:'2026-04-23', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
-  {d:'2026-04-24', slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
-  {d:'2026-04-25', slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'},{t:'20.30-21.45',c:'__WORKSHOP__Workshop: Data Viz, BI & Gen AI\nMr Havish · 8:30pm–9:45pm · Venue B2'}]},
-  {d:'2026-04-26', slots:[{t:'9.15-13.30',c:'__WORKSHOP__Workshop: Data Viz, BI & Gen AI\nMr Havish · 9:15am–1:30pm · Venue B2'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-04-27', slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
-  {d:'2026-04-28', slots:[{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
-  {d:'2026-04-29', slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'19.00-20.15',c:'DAM-A'}]},
-  {d:'2026-04-30', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'MM-A'},{t:'17.30-18.45',c:'MM-A'}]},
-  {d:'2026-05-01', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
-  {d:'2026-05-02', slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-04', slots:[{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
-  {d:'2026-05-05', slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
-  {d:'2026-05-06', slots:[{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
-  {d:'2026-05-07', slots:[{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-08', slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
-  {d:'2026-05-11', slots:[{t:'10.45-12.00',c:'OME-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
-  {d:'2026-05-12', slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-13', slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'FOB-A'}]},
-  {d:'2026-05-14', slots:[{t:'10.45-12.00',c:'FOB-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-15', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-16', slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
-  {d:'2026-05-18', slots:[{t:'9.15-10.30',c:'MPPO-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
-  {d:'2026-05-19', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Qambar)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'FOB-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
-  {d:'2026-05-20', slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'},{t:'19.00-20.15',c:'FOB-A'}]},
-  {d:'2026-05-21', slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Qambar)'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
-  {d:'2026-05-22', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Qambar)'},{t:'10.45-12.00',c:'OME-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
-  {d:'2026-05-23', slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-05-25', slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'FOB-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
-  {d:'2026-05-26', slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
-  {d:'2026-05-27', slots:[{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
-  {d:'2026-05-28', slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'MPPO-A'},{t:'17.30-18.45',c:'MPPO-A'}]},
-  {d:'2026-05-29', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
-  {d:'2026-05-30', slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
-  {d:'2026-06-01', slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
-  {d:'2026-06-02', slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
-  {d:'2026-06-03', slots:[{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
-  {d:'2026-06-04', slots:[{t:'12.15-13.30',c:'DAM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'OME-A'}]},
-  {d:'2026-06-05', slots:[{t:'All day',c:'__EXAM__'}]},
+  {d:'2026-04-22',slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
+  {d:'2026-04-23',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
+  {d:'2026-04-24',slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
+  {d:'2026-04-25',slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'},{t:'20.30-21.45',c:'__WORKSHOP__Workshop: Data Viz, BI & Gen AI\nMr. Havish · 8:30 PM – 9:45 PM · Venue B2'}]},
+  {d:'2026-04-26',slots:[{t:'9.15-13.30',c:'__WORKSHOP__Workshop: Data Viz, BI & Gen AI\nMr. Havish · 9:15 AM – 1:30 PM · Venue B2'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-04-27',slots:[{t:'10.45-12.00',c:'CFT-I (A)'},{t:'12.15-13.30',c:'CFT-I (A)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
+  {d:'2026-04-28',slots:[{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
+  {d:'2026-04-29',slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'19.00-20.15',c:'DAM-A'}]},
+  {d:'2026-04-30',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'MM-A'},{t:'17.30-18.45',c:'MM-A'}]},
+  {d:'2026-05-01',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
+  {d:'2026-05-02',slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-04',slots:[{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
+  {d:'2026-05-05',slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
+  {d:'2026-05-06',slots:[{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
+  {d:'2026-05-07',slots:[{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-08',slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
+  {d:'2026-05-11',slots:[{t:'10.45-12.00',c:'OME-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
+  {d:'2026-05-12',slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-13',slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'FOB-A'}]},
+  {d:'2026-05-14',slots:[{t:'10.45-12.00',c:'FOB-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-15',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-16',slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
+  {d:'2026-05-18',slots:[{t:'9.15-10.30',c:'MPPO-A'},{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
+  {d:'2026-05-19',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Qambar)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'FOB-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
+  {d:'2026-05-20',slots:[{t:'9.15-10.30',c:'MM-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'},{t:'19.00-20.15',c:'FOB-A'}]},
+  {d:'2026-05-21',slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Qambar)'},{t:'12.15-13.30',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
+  {d:'2026-05-22',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Qambar)'},{t:'10.45-12.00',c:'OME-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
+  {d:'2026-05-23',slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-05-25',slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'12.15-13.30',c:'FOB-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MPPO-A'},{t:'16.00-17.15',c:'MPPO-A'}]},
+  {d:'2026-05-26',slots:[{t:'9.15-10.30',c:'FOB-A'},{t:'10.45-12.00',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
+  {d:'2026-05-27',slots:[{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'MM-A'}]},
+  {d:'2026-05-28',slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'MPPO-A'},{t:'17.30-18.45',c:'MPPO-A'}]},
+  {d:'2026-05-29',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'OME-A'},{t:'12.15-13.30',c:'EFAAC-A (Prof Qambar)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'MM-A'},{t:'16.00-17.15',c:'DAM-A'},{t:'17.30-18.45',c:'DAM-A'}]},
+  {d:'2026-05-30',slots:[{t:'10.45-12.00',c:'MPPO-A'},{t:'12.15-13.30',c:'MPPO-A'},{t:'13.30-14.30',c:'__LUNCH__'}]},
+  {d:'2026-06-01',slots:[{t:'9.15-10.30',c:'EFAAC-A (Prof Jijo)'},{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'DAM-A'},{t:'16.00-17.15',c:'DAM-A'}]},
+  {d:'2026-06-02',slots:[{t:'10.45-12.00',c:'EFAAC-A (Prof Jijo)'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'DAM-A'},{t:'19.00-20.15',c:'DAM-A'}]},
+  {d:'2026-06-03',slots:[{t:'10.45-12.00',c:'MM-A'},{t:'12.15-13.30',c:'MM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'14.30-15.45',c:'OME-A'},{t:'16.00-17.15',c:'OME-A'}]},
+  {d:'2026-06-04',slots:[{t:'12.15-13.30',c:'DAM-A'},{t:'13.30-14.30',c:'__LUNCH__'},{t:'16.00-17.15',c:'OME-A'},{t:'17.30-18.45',c:'OME-A'}]},
+  {d:'2026-06-05',slots:[{t:'All day',c:'__EXAM__'}]},
 ];
 
-const MAP = {};
-SCHEDULE.forEach(d => MAP[d.d] = d.slots);
-const DATES = SCHEDULE.map(d => d.d);
-const TERM_START = '2026-04-22';
-const TERM_END   = '2026-06-05';
+const MAP={}, DATES=SCHEDULE.map(d=>d.d);
+SCHEDULE.forEach(d=>MAP[d.d]=d.slots);
+const TERM_S='2026-04-22', TERM_E='2026-06-05';
+let idx=0;
 
-let idx = 0;
+function toDS(dt){return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
+function parseTm(s){const[h,m]=(s||'0.0').split('.').map(Number);return h*60+(m||0);}
 
-function toDateStr(date) {
-  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+function to12(s){
+  const[hStr,mStr]=(s||'0.0').split('.');
+  let h=parseInt(hStr,10),m=parseInt(mStr||'0',10);
+  const ampm=h<12?'AM':'PM';
+  if(h===0)h=12; else if(h>12)h-=12;
+  return{time:`${h}:${String(m).padStart(2,'0')}`,ampm};
 }
 
-function parseTime(t) {
-  const [h, m] = t.split('.').map(Number);
-  return h * 60 + m;
+function fmtSlot(t){
+  if(t==='All day')return{t1:'All',a1:'',t2:'Day',a2:''};
+  const p=t.split('-');
+  if(p.length<2)return{t1:t,a1:'',t2:'',a2:''};
+  const s=to12(p[0].trim()),e=to12(p[1].trim());
+  return{t1:s.time,a1:s.ampm,t2:e.time,a2:e.ampm};
 }
 
-function isNowInSlot(t) {
-  if (t === 'All day') return true;
-  const parts = t.split('-');
-  if (parts.length < 2) return false;
-  const now = new Date();
-  const cur = now.getHours() * 60 + now.getMinutes();
-  const start = parseTime(parts[0].trim());
-  const end   = parseTime(parts[1].trim());
-  return cur >= start && cur <= end;
+function isNow(t){
+  if(t==='All day')return true;
+  const p=t.split('-');if(p.length<2)return false;
+  const now=new Date(),cur=now.getHours()*60+now.getMinutes();
+  try{return cur>=parseTm(p[0].trim())&&cur<=parseTm(p[1].trim());}catch(e){return false;}
 }
 
-function getCode(c) {
-  if (!c || c.startsWith('__')) return null;
-  return c.split('-')[0].split('(')[0].trim();
+function getCode(c){if(!c||c.startsWith('__'))return null;return c.split('-')[0].split('(')[0].trim();}
+
+function getFaculty(c){
+  const code=getCode(c);if(!code)return'';
+  if(code==='EFAAC'){
+    const m=c.match(/\(([^)]+)\)/);
+    if(m){if(m[1].includes('Jijo'))return'Prof. Jijo Lukose';if(m[1].includes('Qambar'))return'Prof. Qambar Abidi';return m[1];}
+    return'Prof. Jijo Lukose';
+  }
+  return FACULTY[code]||'';
 }
 
-function findTodayIdx() {
-  const today = toDateStr(new Date());
-  let i = DATES.findIndex(d => d >= today);
-  return i === -1 ? DATES.length - 1 : i;
-}
+function todayIdx(){const t=toDS(new Date());const i=DATES.findIndex(d=>d>=t);return i===-1?DATES.length-1:i;}
+function termPct(){const n=Date.now(),s=new Date(TERM_S).getTime(),e=new Date(TERM_E).getTime();return Math.max(0,Math.min(100,Math.round((n-s)/(e-s)*100)));}
+function daysLeft(){const t=new Date();t.setHours(0,0,0,0);const e=new Date(TERM_E);e.setHours(0,0,0,0);return Math.max(0,Math.ceil((e-t)/86400000));}
 
-function termProgress() {
-  const now = Date.now();
-  const start = new Date(TERM_START).getTime();
-  const end   = new Date(TERM_END).getTime();
-  return Math.max(0, Math.min(100, Math.round((now - start) / (end - start) * 100)));
-}
-
-function daysLeft() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const end = new Date(TERM_END); end.setHours(0,0,0,0);
-  const diff = Math.ceil((end - today) / 86400000);
-  return Math.max(0, diff);
-}
-
-function countHours(slots) {
-  let mins = 0;
-  slots.forEach(s => {
-    if (s.c === '__LUNCH__' || s.c.startsWith('__')) return;
-    const parts = s.t.split('-');
-    if (parts.length < 2) return;
-    try {
-      mins += parseTime(parts[1].trim()) - parseTime(parts[0].trim());
-    } catch(e) {}
+function countMins(slots){
+  let m=0;
+  slots.forEach(s=>{
+    if(s.c.startsWith('__'))return;
+    const p=s.t.split('-');if(p.length<2)return;
+    try{m+=parseTm(p[1].trim())-parseTm(p[0].trim());}catch(e){}
   });
-  return (mins / 60).toFixed(1);
+  return m;
 }
 
-function render() {
-  const dateStr = DATES[idx];
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const dt = new Date(y, m-1, d);
-  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtMins(m){
+  const h=Math.floor(m/60),mn=m%60;
+  if(h===0)return`${mn} mins`;
+  if(mn===0)return`${h} hrs`;
+  return`${h} hrs ${mn} mins`;
+}
 
-  document.getElementById('date-day').textContent = `${DAYS[dt.getDay()]}, ${d}`;
-  document.getElementById('date-month').textContent = `${MONTHS[m-1].toUpperCase()} ${y}`;
+function render(){
+  const ds=DATES[idx];
+  const[y,mo,d]=ds.split('-').map(Number);
+  const dt=new Date(y,mo-1,d);
+  const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  const pct = termProgress();
-  document.getElementById('progress-pct').textContent = pct + '%';
-  document.getElementById('progress-fill').style.width = pct + '%';
+  // Format: "Monday, 22 April" on one line, year below
+  document.getElementById('date-day').textContent=`${DAYS[dt.getDay()]}, ${String(d).padStart(2,'0')} ${MONTHS[mo-1]}`;
+  document.getElementById('date-year').textContent=`${y}`;
 
-  const slots = MAP[dateStr] || [];
-  const classes = slots.filter(s => !s.c.startsWith('__')).length;
-  const hrs = countHours(slots);
-  const left = daysLeft();
+  const pct=termPct();
+  document.getElementById('progress-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
 
-  document.getElementById('stat-classes').textContent = classes;
-  document.getElementById('stat-hours').textContent = hrs;
-  document.getElementById('stat-days').textContent = left;
+  const slots=MAP[ds]||[];
+  const classes=slots.filter(s=>!s.c.startsWith('__')).length;
+  const mins=countMins(slots);
+  document.getElementById('stat-classes').textContent=classes;
+  document.getElementById('stat-hours').textContent=mins>0?fmtMins(mins):'—';
+  document.getElementById('stat-days').textContent=daysLeft();
 
-  if (slots.length === 0) {
-    document.getElementById('schedule-body').innerHTML = `
-      <div class="no-class">
-        <div class="no-class-icon">◎</div>
-        <div class="no-class-text">No classes today</div>
-        <div class="no-class-sub">Free day · rest or revise</div>
-      </div>`;
+  if(slots.length===0){
+    document.getElementById('schedule-body').innerHTML=`<div class="no-class"><div class="no-class-icon">—</div><div class="no-class-text">No classes today</div><div class="no-class-sub">Free day · rest or revise</div></div>`;
     return;
   }
 
-  let html = '';
-  slots.forEach((slot, i) => {
-    const timeParts = slot.t.split('-');
-    const t1 = timeParts[0] ? timeParts[0].trim() : slot.t;
-    const t2 = timeParts[1] ? timeParts[1].trim() : '';
-    const anim = `slot-anim-${Math.min(i, 7)}`;
-    const isNow = isNowInSlot(slot.t);
+  let html='';
+  slots.forEach((slot,i)=>{
+    const{t1,a1,t2,a2}=fmtSlot(slot.t);
+    const anim=`slot-anim-${Math.min(i,7)}`;
+    const now=isNow(slot.t);
 
-    if (slot.c === '__LUNCH__') {
-      html += `<div class="slot ${anim}">
-        <div class="time-col"><div class="time-start">${t1}</div><div class="time-end">${t2}</div></div>
-        <div class="lunch-card"><div class="lunch-dot"></div><div class="lunch-text">lunch break</div></div>
+    if(slot.c==='__LUNCH__'){
+      html+=`<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="lunch-card"><div class="lunch-dot"></div><div class="lunch-text">Lunch Break</div></div>
       </div>`;
-    } else if (slot.c.startsWith('__WORKSHOP__')) {
-      const detail = slot.c.replace('__WORKSHOP__','').split('\n');
-      html += `<div class="slot ${anim}">
-        <div class="time-col"><div class="time-start">${t1}</div><div class="time-end">${t2}</div></div>
-        <div class="workshop-card">
-          <div class="workshop-code">Workshop</div>
-          <div class="workshop-title">${detail[0] || ''}</div>
-          ${detail[1] ? `<div class="workshop-sub">${detail[1]}</div>` : ''}
-        </div>
+    } else if(slot.c.startsWith('__WORKSHOP__')){
+      const det=slot.c.replace('__WORKSHOP__','').split('\n');
+      html+=`<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="workshop-card"><div class="workshop-label">Workshop</div><div class="workshop-title">${det[0]||''}</div>${det[1]?`<div class="workshop-sub">${det[1]}</div>`:''}</div>
       </div>`;
-    } else if (slot.c === '__EXAM__') {
-      html += `<div class="slot ${anim}">
+    } else if(slot.c==='__EXAM__'){
+      html+=`<div class="slot ${anim}">
         <div class="time-col"><div class="time-start">All</div><div class="time-end">Day</div></div>
-        <div class="exam-card">
-          <div class="exam-text">End Term Exam</div>
-          <div class="exam-sub">PGP BL07 · Term I</div>
-        </div>
+        <div class="exam-card"><div class="exam-text">End Term Exam</div><div class="exam-sub">PGP BL07 · Term I</div></div>
       </div>`;
     } else {
-      const code = getCode(slot.c);
-      const col = COLORS[code] || { color:'var(--fob)', bg:'rgba(160,160,184,0.1)', border:'rgba(160,160,184,0.6)' };
-      const full = FULL[code] || code;
-      const profMatch = slot.c.match(/\(([^)]+)\)/);
-      const prof = profMatch ? profMatch[1] : '';
-      html += `<div class="slot ${anim}">
-        <div class="time-col"><div class="time-start">${t1}</div><div class="time-end">${t2}</div></div>
+      const code=getCode(slot.c);
+      const col=COLORS[code]||{color:'var(--fob)',bg:'var(--fob-bg)',border:'var(--fob-b)'};
+      const full=FULL[code]||code;
+      const fac=getFaculty(slot.c);
+      html+=`<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
         <div class="class-card" style="background:${col.bg};border-left-color:${col.border};color:${col.color};">
           <div class="class-code">${code}</div>
           <div class="class-full">${full}</div>
-          ${prof ? `<div class="class-prof">${prof}</div>` : ''}
-          ${isNow ? '<span class="now-badge">now</span>' : ''}
+          ${fac?`<div class="class-faculty">${fac}</div>`:''}
+          ${now?'<span class="now-badge">Now</span>':''}
         </div>
       </div>`;
     }
   });
-
-  document.getElementById('schedule-body').innerHTML = html;
+  document.getElementById('schedule-body').innerHTML=html;
 }
 
-function changeDay(dir) {
-  idx = Math.max(0, Math.min(DATES.length - 1, idx + dir));
-  render();
+function renderHolidays(){
+  const DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const scheduled=new Set(DATES);
+  const free=[];
+  const today=toDS(new Date());
+  for(let dt=new Date(TERM_S);toDS(dt)<=TERM_E;dt.setDate(dt.getDate()+1)){
+    const ds=toDS(new Date(dt));
+    if(!scheduled.has(ds))free.push(new Date(dt));
+  }
+  const byMonth={};
+  free.forEach(dt=>{
+    const k=`${dt.getFullYear()}-${dt.getMonth()}`;
+    if(!byMonth[k])byMonth[k]={label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`,days:[]};
+    byMonth[k].days.push(dt);
+  });
+  let html='';
+  Object.values(byMonth).forEach(g=>{
+    html+=`<div class="holiday-month-label">${g.label}</div>`;
+    g.days.forEach((dt,i)=>{
+      const ds=toDS(dt),dow=dt.getDay(),dd=dt.getDate();
+      const past=ds<today;
+      const isNH=NATIONAL[ds];
+      const isWk=dow===0||dow===6;
+      const tc=isNH?'type-national':isWk?'type-weekend':'type-free';
+      const name=isNH?NATIONAL[ds]:isWk?(dow===0?'Sunday':'Saturday'):'Free Day — No Classes';
+      const tl=isNH?'Public Holiday':isWk?(dow===0?'Sunday':'Saturday'):'No Classes';
+      html+=`<div class="holiday-item slot-anim-${Math.min(i,7)}" style="${past?'opacity:0.45':''}">
+        <div class="holiday-date-box"><div class="holiday-dd">${String(dd).padStart(2,'0')}</div><div class="holiday-dow">${DOWS[dow]}</div></div>
+        <div class="holiday-divider"></div>
+        <div class="holiday-info"><div class="holiday-name">${name}</div><span class="holiday-type ${tc}">${tl}</span></div>
+      </div>`;
+    });
+  });
+  html+=`<div style="padding:0.75rem 0 0.5rem"><span class="holiday-count-badge">${free.length} free days in Term I</span></div>`;
+  document.getElementById('holidays-body').innerHTML=html;
 }
 
-function goToday() {
-  idx = findTodayIdx();
-  render();
+function switchTab(tab){
+  document.getElementById('tab-schedule').classList.toggle('active',tab==='schedule');
+  document.getElementById('tab-holidays').classList.toggle('active',tab==='holidays');
+  document.getElementById('schedule-view').style.display=tab==='schedule'?'':'none';
+  document.getElementById('holidays-view').style.display=tab==='holidays'?'':'none';
+  document.getElementById('header-date').style.display=tab==='schedule'?'':'none';
+  document.getElementById('day-nav-row').style.display=tab==='schedule'?'':'none';
+  if(tab==='holidays')renderHolidays();
 }
 
-idx = findTodayIdx();
+function changeDay(dir){idx=Math.max(0,Math.min(DATES.length-1,idx+dir));render();}
+function goToday(){idx=todayIdx();render();}
+
+idx=todayIdx();
 render();
 </script>
 </body>
