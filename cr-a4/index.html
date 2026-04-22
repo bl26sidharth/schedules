@@ -576,23 +576,56 @@ function render(){
 }
 
 function renderHolidays(){
+  const body = document.getElementById('holidays-body');
+  if(!body){
+    console.error('holidays-body element not found');
+    return;
+  }
+
+  if(!DATES.length){
+    body.innerHTML = '<div class="no-class"><div class="no-class-text">Schedule not loaded yet</div><div class="no-class-sub">Wait for sync to finish, then re-open this tab</div></div>';
+    return;
+  }
+
+  // Use FIXED term range — from first date in sheet to last date in sheet
+  // This ensures we show free days between classes regardless of what the sheet contains
+  const termStart = DATES[0];
+  const termEnd   = DATES[DATES.length-1];
+
   const DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const scheduled = new Set(DATES);
   const free = [];
   const today = toDS(new Date());
-  for(let dt=new Date(TERM_S); toDS(dt)<=TERM_E; dt.setDate(dt.getDate()+1)){
-    const ds = toDS(new Date(dt));
-    if(!scheduled.has(ds)) free.push(new Date(dt));
+
+  // Iterate day by day from termStart to termEnd (inclusive)
+  const [sy,sm,sd] = termStart.split('-').map(Number);
+  const [ey,em,ed] = termEnd.split('-').map(Number);
+  const startDt = new Date(sy, sm-1, sd);
+  const endDt   = new Date(ey, em-1, ed);
+
+  for(let dt = new Date(startDt); dt <= endDt; dt.setDate(dt.getDate()+1)){
+    const ds = toDS(dt);
+    if(!scheduled.has(ds)){
+      free.push(new Date(dt));
+    }
   }
+
+  if(free.length === 0){
+    body.innerHTML = '<div class="no-class"><div class="no-class-text">No free days</div><div class="no-class-sub">All days in term are scheduled</div></div>';
+    return;
+  }
+
   const byMonth = {};
   free.forEach(dt => {
-    const k = `${dt.getFullYear()}-${dt.getMonth()}`;
-    if(!byMonth[k]) byMonth[k] = {label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`, days:[]};
+    const k = `${dt.getFullYear()}-${String(dt.getMonth()).padStart(2,'0')}`;
+    if(!byMonth[k]) byMonth[k] = {label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`, days:[], sortKey:k};
     byMonth[k].days.push(dt);
   });
+
   let html='';
-  Object.values(byMonth).forEach(g => {
+  Object.keys(byMonth).sort().forEach(k => {
+    const g = byMonth[k];
     html += `<div class="holiday-month-label">${g.label}</div>`;
     g.days.forEach((dt,i) => {
       const ds=toDS(dt), dow=dt.getDay(), dd=dt.getDate();
@@ -610,20 +643,30 @@ function renderHolidays(){
     });
   });
   html += `<div style="padding:0.75rem 0 0.5rem"><span class="holiday-count-badge">${free.length} free days in Term I</span></div>`;
-  document.getElementById('holidays-body').innerHTML = html;
+  body.innerHTML = html;
 }
 
 function switchTab(tab){
   currentTab = tab;
-  document.getElementById('tab-schedule').classList.toggle('active', tab==='schedule');
-  document.getElementById('tab-holidays').classList.toggle('active', tab==='holidays');
+  const tabSchedule = document.getElementById('tab-schedule');
+  const tabHolidays = document.getElementById('tab-holidays');
+  if(tabSchedule) tabSchedule.classList.toggle('active', tab==='schedule');
+  if(tabHolidays) tabHolidays.classList.toggle('active', tab==='holidays');
+
   const sv = document.getElementById('schedule-view');
   const hv = document.getElementById('holidays-view');
   if(sv) sv.style.display = tab==='schedule' ? '' : 'none';
   if(hv) hv.style.display = tab==='holidays' ? '' : 'none';
-  document.getElementById('header-date').style.display = tab==='schedule' ? '' : 'none';
-  document.getElementById('day-nav-row').style.display = tab==='schedule' ? '' : 'none';
-  if(tab==='holidays' && DATES.length) renderHolidays();
+
+  const headerDate = document.getElementById('header-date');
+  const dayNavRow  = document.getElementById('day-nav-row');
+  if(headerDate) headerDate.style.display = tab==='schedule' ? '' : 'none';
+  if(dayNavRow)  dayNavRow.style.display  = tab==='schedule' ? '' : 'none';
+
+  if(tab==='holidays'){
+    // Always re-render when switching to holidays tab
+    renderHolidays();
+  }
 }
 
 function changeDay(dir){ idx=Math.max(0,Math.min(DATES.length-1,idx+dir)); render(); }
