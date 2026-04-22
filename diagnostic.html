@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSV Fetch Diagnostic</title>
+<style>
+body { font-family: -apple-system,Helvetica,Arial,sans-serif; max-width:700px; margin:20px auto; padding:0 16px; line-height:1.5; }
+h2 { font-size:16px; margin-top:20px; }
+.row { padding:12px; background:#f3f3ed; border-radius:8px; margin:8px 0; font-family:monospace; font-size:12px; word-break:break-all; }
+.ok { background:#e8f7ef; color:#2a7a50; }
+.err { background:#fdeaea; color:#b83232; }
+button { background:#5b4fcf; color:white; border:none; padding:10px 16px; border-radius:6px; font-size:14px; cursor:pointer; margin-right:8px; }
+pre { background:#111; color:#0f0; padding:12px; border-radius:6px; overflow-x:auto; font-size:11px; max-height:300px; }
+</style>
+</head>
+<body>
+
+<h1>CSV Fetch Diagnostic</h1>
+<p>This page tries three different methods to fetch your sheet. The one that works tells us what's wrong.</p>
+
+<p><b>Current origin:</b> <span id="origin"></span></p>
+
+<button onclick="runAll()">▶ Run all tests</button>
+<button onclick="copyUrl()">📋 Copy CSV URL</button>
+
+<h2>Test 1: Direct fetch (standard)</h2>
+<div class="row" id="test1">Not run yet.</div>
+
+<h2>Test 2: Fetch with no-cors mode</h2>
+<div class="row" id="test2">Not run yet.</div>
+
+<h2>Test 3: Via AllOrigins proxy</h2>
+<div class="row" id="test3">Not run yet.</div>
+
+<h2>First 500 chars of response (if any)</h2>
+<pre id="preview">—</pre>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYswdABqsqnLETAh0TKMsRsescez0I_II1SrZw2nyhpGco-7HyeZ5NhsZ7h2lE1GZGaj9lRD2HiTLR/pub?gid=0&single=true&output=csv';
+
+document.getElementById('origin').textContent = window.location.origin || '(file://)';
+
+function copyUrl(){
+  navigator.clipboard.writeText(CSV_URL).then(()=>alert('URL copied'));
+}
+
+function setResult(id, ok, msg){
+  const el = document.getElementById(id);
+  el.className = 'row ' + (ok ? 'ok' : 'err');
+  el.textContent = msg;
+}
+
+async function test1(){
+  try {
+    const r = await fetch(CSV_URL);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const text = await r.text();
+    setResult('test1', true, `✓ SUCCESS — got ${text.length} chars, HTTP ${r.status}`);
+    document.getElementById('preview').textContent = text.slice(0,500);
+    return true;
+  } catch(e){
+    setResult('test1', false, `✗ FAILED — ${e.message}`);
+    return false;
+  }
+}
+
+async function test2(){
+  try {
+    const r = await fetch(CSV_URL, {mode:'no-cors'});
+    setResult('test2', true, `Response type: ${r.type} (opaque = can't read body, but network works)`);
+    return true;
+  } catch(e){
+    setResult('test2', false, `✗ FAILED — ${e.message}`);
+    return false;
+  }
+}
+
+async function test3(){
+  const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL);
+  try {
+    const r = await fetch(proxy);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const text = await r.text();
+    setResult('test3', true, `✓ SUCCESS via proxy — got ${text.length} chars`);
+    if(!document.getElementById('preview').textContent || document.getElementById('preview').textContent === '—'){
+      document.getElementById('preview').textContent = text.slice(0,500);
+    }
+    return true;
+  } catch(e){
+    setResult('test3', false, `✗ FAILED — ${e.message}`);
+    return false;
+  }
+}
+
+async function runAll(){
+  await test1();
+  await test2();
+  await test3();
+}
+
+runAll();
+</script>
+</body>
+</html>
