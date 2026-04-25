@@ -131,11 +131,10 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .cached-banner { background:var(--mm-bg); border:1px solid var(--mm-b); color:var(--mm); border-radius:8px; padding:8px 12px; margin:0 1.25rem 1rem; font-size:11px; text-align:center; }
 
 /* NOTES FEATURE */
-.class-notes-btn { display:inline-flex; align-items:center; gap:4px; margin-top:8px; padding:4px 10px; background:rgba(255,255,255,0.6); border:1px solid currentColor; border-radius:14px; font-family:inherit; font-size:10px; font-weight:600; color:inherit; cursor:pointer; opacity:0.75; letter-spacing:0.02em; }
+.class-notes-btn { display:inline-flex; align-items:center; gap:5px; margin-top:8px; padding:4px 10px; background:rgba(255,255,255,0.6); border:1px solid currentColor; border-radius:14px; font-family:inherit; font-size:10px; font-weight:600; color:inherit; cursor:pointer; opacity:0.85; letter-spacing:0.02em; }
 .class-notes-btn:active { transform:scale(0.95); opacity:1; }
-.class-notes-btn .badge { display:inline-flex; align-items:center; justify-content:center; min-width:14px; height:14px; padding:0 4px; background:currentColor; color:white; border-radius:7px; font-size:9px; margin-left:2px; }
-.class-notes-btn .badge::after { content:""; }
-.class-notes-btn .badge span { color:#fff; mix-blend-mode:normal; }
+.class-notes-btn .badge { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 5px; background:currentColor; border-radius:8px; font-size:10px; font-weight:700; }
+.class-notes-btn .badge-num { color:#fff; }
 
 .notes-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; display:none; align-items:flex-end; justify-content:center; }
 .notes-overlay.show { display:flex; animation:fadeIn 0.2s ease; }
@@ -152,11 +151,22 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .notes-empty-sub { font-size:11px; color:var(--dim); margin-top:5px; }
 
 .session-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px; animation:slideIn 0.2s ease both; }
-.session-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+.session-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; gap:8px; }
 .session-num { font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
 .session-date { font-size:10px; color:var(--muted); }
 .session-text { font-size:13px; line-height:1.5; color:var(--text); white-space:pre-wrap; word-wrap:break-word; }
-.session-locked { font-size:10px; color:var(--dim); margin-top:8px; font-style:italic; }
+.session-meta-row { display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px; }
+.session-saved { font-size:10px; color:var(--dim); font-style:italic; }
+.session-actions { display:flex; gap:6px; }
+.session-action-btn { background:none; border:1px solid var(--border2); color:var(--muted); font-family:inherit; font-size:10px; font-weight:500; padding:3px 9px; border-radius:6px; cursor:pointer; letter-spacing:0.02em; }
+.session-action-btn:active { background:var(--surface2); transform:scale(0.96); }
+.session-action-btn.danger { color:var(--exam); border-color:var(--exam-b); }
+
+.session-edit-textarea { width:100%; min-height:70px; padding:8px 10px; border:1px solid var(--border2); border-radius:6px; font-family:inherit; font-size:13px; background:var(--bg); color:var(--text); resize:vertical; box-sizing:border-box; line-height:1.5; }
+.session-edit-textarea:focus { outline:none; }
+.session-edit-actions { display:flex; gap:6px; margin-top:8px; }
+.session-edit-save { flex:1; background:var(--text); color:var(--bg); border:none; padding:7px 12px; border-radius:6px; font-family:inherit; font-size:11px; font-weight:600; cursor:pointer; }
+.session-edit-cancel { background:var(--surface); color:var(--muted); border:1px solid var(--border2); padding:7px 12px; border-radius:6px; font-family:inherit; font-size:11px; font-weight:500; cursor:pointer; }
 
 .notes-add { padding:0.75rem 1.25rem 1rem; border-top:1px solid var(--border); background:var(--bg); }
 .add-form-label { font-size:10px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
@@ -628,7 +638,7 @@ function render(){
           <div class="class-code">${code}</div>
           <div class="class-full">${full}</div>
           ${fac?`<div class="class-faculty">${fac}</div>`:''}
-          <button class="class-notes-btn" onclick="openNotes('${code}','${DATES[idx]}')" style="color:${col.color};">📝 Notes${noteCount>0?` <span class="badge"><span>${noteCount}</span></span>`:''}</button>
+          <button class="class-notes-btn" onclick="openNotes('${code}','${DATES[idx]}')" style="color:${col.color};">📝 Notes${noteCount>0?` <span class="badge"><span class="badge-num">${noteCount}</span></span>`:''}</button>
           ${now?'<span class="now-badge">Now</span>':''}
         </div>
       </div>`;
@@ -966,24 +976,84 @@ function renderNotesContent(){
         <div class="notes-empty-sub">Add your first note below to start tracking</div>
       </div>`;
   } else {
-    // Show most recent first
+    // Show most recent first; preserve original index for edit/delete
+    const indexed = notes.map((n,i)=>({...n, _i:i}));
+    indexed.sort((a,b) => (b.date+String(b.session).padStart(3,'0')+b.savedAt).localeCompare(a.date+String(a.session).padStart(3,'0')+a.savedAt));
     let html = '';
-    const sorted = [...notes].sort((a,b) => (b.date+b.session).localeCompare(a.date+a.session));
-    sorted.forEach((n,i) => {
+    indexed.forEach((n,renderIdx) => {
       const col = COLORS[code] || {color:'var(--fob)'};
+      const savedLabel = n.savedAt ? `Saved ${new Date(n.savedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}${n.editedAt ? ` · edited ${new Date(n.editedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}` : ''}` : '';
       html += `
-        <div class="session-item" style="border-left:3px solid ${col.color || 'var(--fob)'};animation-delay:${i*0.04}s">
+        <div class="session-item" id="session-${n._i}" style="border-left:3px solid ${col.color || 'var(--fob)'};animation-delay:${renderIdx*0.04}s">
           <div class="session-head">
             <div class="session-num" style="color:${col.color || 'var(--fob)'}">Session ${n.session}</div>
             <div class="session-date">${fmtNiceDate(n.date)}</div>
           </div>
-          <div class="session-text">${escapeHtml(n.text)}</div>
-          ${n.savedAt ? `<div class="session-locked">Locked · saved ${new Date(n.savedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}</div>` : ''}
+          <div class="session-text" id="session-text-${n._i}">${escapeHtml(n.text)}</div>
+          <div class="session-meta-row">
+            <div class="session-saved">${savedLabel}</div>
+            <div class="session-actions">
+              <button class="session-action-btn" onclick="editSession(${n._i})">Edit</button>
+              <button class="session-action-btn danger" onclick="deleteSession(${n._i})">Delete</button>
+            </div>
+          </div>
         </div>`;
     });
     body.innerHTML = html;
   }
   renderAddArea();
+}
+
+function editSession(noteIdx){
+  const code = activeNotesCode;
+  const notes = loadNotes(code);
+  const n = notes[noteIdx];
+  if(!n) return;
+
+  const col = COLORS[code] || {color:'var(--fob)'};
+  const sessionEl = document.getElementById('session-' + noteIdx);
+  if(!sessionEl) return;
+
+  sessionEl.innerHTML = `
+    <div class="session-head">
+      <div class="session-num" style="color:${col.color || 'var(--fob)'}">Session ${n.session}</div>
+      <div class="session-date">${fmtNiceDate(n.date)}</div>
+    </div>
+    <textarea class="session-edit-textarea" id="edit-textarea-${noteIdx}" style="border-color:${col.color || 'var(--border2)'}">${escapeHtml(n.text)}</textarea>
+    <div class="session-edit-actions">
+      <button class="session-edit-cancel" onclick="renderNotesContent()">Cancel</button>
+      <button class="session-edit-save" onclick="saveEditedSession(${noteIdx})">Save changes</button>
+    </div>
+  `;
+  const ta = document.getElementById('edit-textarea-' + noteIdx);
+  ta.focus();
+  // Move cursor to end
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+}
+
+function saveEditedSession(noteIdx){
+  const text = document.getElementById('edit-textarea-' + noteIdx).value.trim();
+  if(!text){ alert('Note cannot be empty'); return; }
+  const code = activeNotesCode;
+  const notes = loadNotes(code);
+  if(!notes[noteIdx]) return;
+  notes[noteIdx].text = text;
+  notes[noteIdx].editedAt = Date.now();
+  if(saveNotes(code, notes)){
+    renderNotesContent();
+  }
+}
+
+function deleteSession(noteIdx){
+  const code = activeNotesCode;
+  const notes = loadNotes(code);
+  if(!notes[noteIdx]) return;
+  const confirmMsg = `Delete this note?\n\nSession ${notes[noteIdx].session} · ${fmtNiceDate(notes[noteIdx].date)}\n\nThis cannot be undone.`;
+  if(!confirm(confirmMsg)) return;
+  notes.splice(noteIdx, 1);
+  if(saveNotes(code, notes)){
+    renderNotesContent();
+  }
 }
 
 function escapeHtml(s){
