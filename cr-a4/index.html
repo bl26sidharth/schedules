@@ -130,6 +130,51 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .retry-btn { background:var(--cft); color:white; border:none; padding:10px 20px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; }
 .cached-banner { background:var(--mm-bg); border:1px solid var(--mm-b); color:var(--mm); border-radius:8px; padding:8px 12px; margin:0 1.25rem 1rem; font-size:11px; text-align:center; }
 
+/* NOTES FEATURE */
+.class-notes-btn { display:inline-flex; align-items:center; gap:4px; margin-top:8px; padding:4px 10px; background:rgba(255,255,255,0.6); border:1px solid currentColor; border-radius:14px; font-family:inherit; font-size:10px; font-weight:600; color:inherit; cursor:pointer; opacity:0.75; letter-spacing:0.02em; }
+.class-notes-btn:active { transform:scale(0.95); opacity:1; }
+.class-notes-btn .badge { display:inline-flex; align-items:center; justify-content:center; min-width:14px; height:14px; padding:0 4px; background:currentColor; color:white; border-radius:7px; font-size:9px; margin-left:2px; }
+.class-notes-btn .badge::after { content:""; }
+.class-notes-btn .badge span { color:#fff; mix-blend-mode:normal; }
+
+.notes-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; display:none; align-items:flex-end; justify-content:center; }
+.notes-overlay.show { display:flex; animation:fadeIn 0.2s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.notes-sheet { background:var(--bg); width:100%; max-width:430px; max-height:90vh; border-radius:18px 18px 0 0; display:flex; flex-direction:column; animation:slideUp 0.25s cubic-bezier(0.16,1,0.3,1); }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.notes-header { padding:1rem 1.25rem 0.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.notes-title { font-size:18px; font-weight:700; letter-spacing:-0.02em; line-height:1.2; }
+.notes-sub { font-size:11px; color:var(--muted); margin-top:3px; }
+.notes-close { background:var(--surface); border:1px solid var(--border2); width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--text); }
+.notes-close:active { background:var(--surface2); }
+.notes-body { flex:1; overflow-y:auto; padding:1rem 1.25rem; }
+.notes-empty { text-align:center; padding:2rem 1rem; color:var(--muted); font-size:13px; }
+.notes-empty-sub { font-size:11px; color:var(--dim); margin-top:5px; }
+
+.session-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px; animation:slideIn 0.2s ease both; }
+.session-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+.session-num { font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+.session-date { font-size:10px; color:var(--muted); }
+.session-text { font-size:13px; line-height:1.5; color:var(--text); white-space:pre-wrap; word-wrap:break-word; }
+.session-locked { font-size:10px; color:var(--dim); margin-top:8px; font-style:italic; }
+
+.notes-add { padding:0.75rem 1.25rem 1rem; border-top:1px solid var(--border); background:var(--bg); }
+.add-form-label { font-size:10px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.add-form-meta { font-size:11px; color:var(--text); margin-bottom:8px; font-weight:500; }
+.add-form-textarea { width:100%; min-height:80px; padding:10px 12px; border:1px solid var(--border2); border-radius:8px; font-family:inherit; font-size:13px; background:var(--surface); color:var(--text); resize:vertical; box-sizing:border-box; }
+.add-form-textarea:focus { outline:none; border-color:currentColor; }
+.add-form-row { display:flex; gap:8px; margin-top:10px; }
+.add-save-btn { flex:1; background:var(--text); color:var(--bg); border:none; padding:10px 16px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; letter-spacing:0.03em; }
+.add-save-btn:active { transform:scale(0.97); }
+.add-save-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.add-cancel-btn { background:var(--surface); color:var(--muted); border:1px solid var(--border2); padding:10px 16px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:500; cursor:pointer; }
+
+.add-trigger-btn { width:100%; padding:11px 14px; background:var(--surface); border:1px dashed var(--border2); border-radius:10px; font-family:inherit; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer; letter-spacing:0.03em; }
+.add-trigger-btn:active { background:var(--surface2); }
+
+.next-class-info { font-size:11px; color:var(--muted); margin-top:6px; padding:6px 9px; background:rgba(0,0,0,0.03); border-radius:6px; display:inline-block; }
+.next-class-info b { color:var(--text); }
+
 .slot-anim-0{animation-delay:0.00s} .slot-anim-1{animation-delay:0.04s} .slot-anim-2{animation-delay:0.08s}
 .slot-anim-3{animation-delay:0.12s} .slot-anim-4{animation-delay:0.16s} .slot-anim-5{animation-delay:0.20s}
 .slot-anim-6{animation-delay:0.24s} .slot-anim-7{animation-delay:0.28s}
@@ -170,6 +215,21 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
       <div class="spinner"></div>
       <div class="loading-text">Loading live schedule…</div>
     </div>
+  </div>
+</div>
+
+<!-- NOTES OVERLAY -->
+<div class="notes-overlay" id="notes-overlay" onclick="closeNotesIfBackdrop(event)">
+  <div class="notes-sheet" onclick="event.stopPropagation()">
+    <div class="notes-header">
+      <div>
+        <div class="notes-title" id="notes-title">—</div>
+        <div class="notes-sub" id="notes-sub">—</div>
+      </div>
+      <button class="notes-close" onclick="closeNotes()">×</button>
+    </div>
+    <div class="notes-body" id="notes-body"></div>
+    <div class="notes-add" id="notes-add"></div>
   </div>
 </div>
 
@@ -561,12 +621,14 @@ function render(){
       const col = COLORS[code] || {color:'var(--fob)',bg:'var(--fob-bg)',border:'var(--fob-b)'};
       const full = FULL[code] || code;
       const fac = getFaculty(slot.c);
+      const noteCount = getNoteCount(code);
       html += `<div class="slot ${anim}">
         <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
         <div class="class-card" style="background:${col.bg};border-left-color:${col.border};color:${col.color};">
           <div class="class-code">${code}</div>
           <div class="class-full">${full}</div>
           ${fac?`<div class="class-faculty">${fac}</div>`:''}
+          <button class="class-notes-btn" onclick="openNotes('${code}','${DATES[idx]}')" style="color:${col.color};">📝 Notes${noteCount>0?` <span class="badge"><span>${noteCount}</span></span>`:''}</button>
           ${now?'<span class="now-badge">Now</span>':''}
         </div>
       </div>`;
@@ -782,6 +844,212 @@ async function loadCSV(forceReload=false){
     </div>`;
 }
 
+// ─────────── NOTES FEATURE ───────────
+const NOTES_KEY_PREFIX = 'pgp-bl07-notes-' + SECTION + '-';
+let activeNotesCode = null;
+let activeNotesDate = null;
+
+function loadNotes(code){
+  try {
+    const raw = localStorage.getItem(NOTES_KEY_PREFIX + code);
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch(e){
+    console.warn('Failed to load notes for', code, e);
+    return [];
+  }
+}
+
+function saveNotes(code, notes){
+  try {
+    localStorage.setItem(NOTES_KEY_PREFIX + code, JSON.stringify(notes));
+    return true;
+  } catch(e){
+    console.error('Failed to save notes:', e);
+    alert('Could not save note (storage may be full)');
+    return false;
+  }
+}
+
+function getNoteCount(code){
+  return loadNotes(code).length;
+}
+
+// Find next class date for a given course code
+function findNextClassDate(code, fromDate){
+  for(const day of SCHEDULE){
+    if(day.d <= fromDate) continue;
+    for(const s of day.slots){
+      if(s.c.startsWith('__')) continue;
+      if(getCode(s.c) === code) return day.d;
+    }
+  }
+  return null;
+}
+
+// Find what session number TODAY is for a course (1-indexed by chronological occurrence)
+function findSessionNumber(code, onDate){
+  let count = 0;
+  for(const day of SCHEDULE){
+    let counted = false;
+    for(const s of day.slots){
+      if(s.c.startsWith('__')) continue;
+      if(getCode(s.c) === code && !counted){
+        count++;
+        counted = true;
+      }
+    }
+    if(day.d === onDate && counted) return count;
+    if(day.d > onDate) break;
+  }
+  return count > 0 ? count : 1;
+}
+
+function fmtNiceDate(ds){
+  const [y,mo,d] = ds.split('-').map(Number);
+  const dt = new Date(y, mo-1, d);
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${DAYS[dt.getDay()]}, ${d} ${MONTHS[mo-1]}`;
+}
+
+function fmtDaysFromNow(ds){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const [y,mo,d] = ds.split('-').map(Number);
+  const target = new Date(y, mo-1, d); target.setHours(0,0,0,0);
+  const diff = Math.round((target-today)/86400000);
+  if(diff===0) return 'today';
+  if(diff===1) return 'tomorrow';
+  if(diff<0) return `${-diff}d ago`;
+  return `in ${diff} days`;
+}
+
+function openNotes(code, currentDate){
+  activeNotesCode = code;
+  activeNotesDate = currentDate;
+  const overlay = document.getElementById('notes-overlay');
+  overlay.classList.add('show');
+  renderNotesContent();
+  // Lock body scroll
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNotes(){
+  document.getElementById('notes-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+  activeNotesCode = null;
+  activeNotesDate = null;
+  // Re-render schedule to update note count badges
+  if(DATES.length) render();
+}
+
+function closeNotesIfBackdrop(e){
+  if(e.target.id === 'notes-overlay') closeNotes();
+}
+
+function renderNotesContent(){
+  const code = activeNotesCode;
+  const date = activeNotesDate;
+  const fullName = FULL[code] || code;
+  const faculty = FACULTY[code] || (code==='EFAAC' ? 'Prof. Jijo Lukose / Prof. Qambar Abidi' : '');
+
+  document.getElementById('notes-title').textContent = `${code} — Course Journal`;
+  document.getElementById('notes-sub').textContent = fullName + (faculty ? ' · ' + faculty : '');
+
+  const notes = loadNotes(code);
+  const body = document.getElementById('notes-body');
+  if(notes.length === 0){
+    body.innerHTML = `
+      <div class="notes-empty">
+        No sessions logged yet
+        <div class="notes-empty-sub">Add your first note below to start tracking</div>
+      </div>`;
+  } else {
+    // Show most recent first
+    let html = '';
+    const sorted = [...notes].sort((a,b) => (b.date+b.session).localeCompare(a.date+a.session));
+    sorted.forEach((n,i) => {
+      const col = COLORS[code] || {color:'var(--fob)'};
+      html += `
+        <div class="session-item" style="border-left:3px solid ${col.color || 'var(--fob)'};animation-delay:${i*0.04}s">
+          <div class="session-head">
+            <div class="session-num" style="color:${col.color || 'var(--fob)'}">Session ${n.session}</div>
+            <div class="session-date">${fmtNiceDate(n.date)}</div>
+          </div>
+          <div class="session-text">${escapeHtml(n.text)}</div>
+          ${n.savedAt ? `<div class="session-locked">Locked · saved ${new Date(n.savedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}</div>` : ''}
+        </div>`;
+    });
+    body.innerHTML = html;
+  }
+  renderAddArea();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+function renderAddArea(){
+  const code = activeNotesCode;
+  const date = activeNotesDate;
+  const addArea = document.getElementById('notes-add');
+
+  // Compute session number and next class
+  const session = findSessionNumber(code, date);
+  const nextDate = findNextClassDate(code, date);
+  const col = COLORS[code] || {color:'var(--fob)'};
+
+  addArea.innerHTML = `
+    <div class="add-form-label">Today · Session ${session}</div>
+    <div class="add-form-meta" style="color:${col.color || 'var(--fob)'}">
+      ${fmtNiceDate(date)}${nextDate ? ` &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">Next ${code}: ${fmtNiceDate(nextDate)} (${fmtDaysFromNow(nextDate)})</span>` : ' &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">No more classes scheduled</span>'}
+    </div>
+    <button class="add-trigger-btn" id="add-trigger" onclick="showAddForm()">+ Add note for this session</button>
+  `;
+}
+
+function showAddForm(){
+  const code = activeNotesCode;
+  const date = activeNotesDate;
+  const session = findSessionNumber(code, date);
+  const nextDate = findNextClassDate(code, date);
+  const col = COLORS[code] || {color:'var(--fob)'};
+
+  const addArea = document.getElementById('notes-add');
+  addArea.innerHTML = `
+    <div class="add-form-label">New entry · Session ${session}</div>
+    <div class="add-form-meta" style="color:${col.color || 'var(--fob)'}">
+      ${fmtNiceDate(date)}${nextDate ? ` &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">Prep for next class: ${fmtNiceDate(nextDate)} (${fmtDaysFromNow(nextDate)})</span>` : ''}
+    </div>
+    <textarea class="add-form-textarea" id="add-textarea" placeholder="Today's classwork, homework, prep for next session..." style="border-color:${col.color || 'var(--border2)'}"></textarea>
+    <div class="add-form-row">
+      <button class="add-cancel-btn" onclick="renderAddArea()">Cancel</button>
+      <button class="add-save-btn" onclick="saveNewNote()">Save note</button>
+    </div>
+  `;
+  setTimeout(() => document.getElementById('add-textarea').focus(), 50);
+}
+
+function saveNewNote(){
+  const text = document.getElementById('add-textarea').value.trim();
+  if(!text){ alert('Please type something before saving'); return; }
+  const code = activeNotesCode;
+  const date = activeNotesDate;
+  const session = findSessionNumber(code, date);
+  const notes = loadNotes(code);
+  notes.push({
+    session: session,
+    date: date,
+    text: text,
+    savedAt: Date.now()
+  });
+  if(saveNotes(code, notes)){
+    renderNotesContent();
+  }
+}
+
+// ─────────── INIT ───────────
 loadCSV();
 </script>
 </body>
