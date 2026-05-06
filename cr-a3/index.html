@@ -22,21 +22,42 @@
   --fob:#555566; --fob-bg:#f0f0f4; --fob-b:rgba(85,85,102,0.35);
   --exam:#b83232; --exam-bg:#fdeaea; --exam-b:rgba(184,50,50,0.35);
   --ws:#6b3fb5; --ws-bg:#f2edfb; --ws-b:rgba(107,63,181,0.35);
+  --cancelled:#b83232; --added:#2a7a50;
+  --backdrop-card:rgba(255,255,255,0.6);
+}
+[data-theme="dark"] {
+  --bg:#0e0e10; --surface:#1a1a1d; --surface2:#232327;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#f0f0f0; --muted:#888888; --dim:#555555;
+  --cft:#9b8eff; --cft-bg:#2a2540; --cft-b:rgba(155,142,255,0.4);
+  --ome:#f49069; --ome-bg:#3d2a22; --ome-b:rgba(244,144,105,0.4);
+  --dam:#5fb0e6; --dam-bg:#1f2f3e; --dam-b:rgba(95,176,230,0.4);
+  --mppo:#e887b9; --mppo-bg:#3a2530; --mppo-b:rgba(232,135,185,0.4);
+  --mm:#d4a546; --mm-bg:#3a2f1a; --mm-b:rgba(212,165,70,0.4);
+  --efaac:#5fc88c; --efaac-bg:#1f3329; --efaac-b:rgba(95,200,140,0.4);
+  --fob:#9999aa; --fob-bg:#2a2a30; --fob-b:rgba(153,153,170,0.4);
+  --exam:#e86d6d; --exam-bg:#3a2222; --exam-b:rgba(232,109,109,0.4);
+  --ws:#a78bfa; --ws-bg:#2c2440; --ws-b:rgba(167,139,250,0.4);
+  --cancelled:#e86d6d; --added:#5fc88c;
+  --backdrop-card:rgba(255,255,255,0.04);
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html,body { background:var(--bg); color:var(--text); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; min-height:100vh; overflow-x:hidden; }
+html,body { background:var(--bg); color:var(--text); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; min-height:100vh; overflow-x:hidden; transition:background 0.2s, color 0.2s; }
 .app { max-width:430px; margin:0 auto; padding:0 0 5rem; }
 
 header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:linear-gradient(to bottom,var(--bg) 85%,transparent); z-index:10; }
-.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.1rem; }
+.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.1rem; gap:8px; }
+.header-left { display:flex; align-items:center; gap:8px; }
 .tag { font-size:10px; font-weight:500; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; }
+.theme-toggle { background:var(--surface); border:1px solid var(--border2); width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--text); }
+.theme-toggle:active { transform:scale(0.92); }
 .class-badge { font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--cft); border:1.5px solid var(--cft-b); padding:4px 10px; border-radius:20px; background:var(--cft-bg); }
 .date-display { margin-bottom:1rem; }
 .date-day { font-size:24px; font-weight:700; line-height:1.15; letter-spacing:-0.02em; color:var(--text); }
 .date-year { font-size:12px; font-weight:400; color:var(--muted); margin-top:3px; }
 
 .sync-row { display:flex; justify-content:space-between; align-items:center; padding:0 1.25rem; margin-bottom:0.75rem; font-size:10px; color:var(--muted); }
-.sync-dot { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:6px; vertical-align:middle; background:var(--dim); transition:background 0.3s; }
+.sync-dot { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:6px; vertical-align:middle; background:var(--dim); }
 .sync-dot.ok { background:var(--efaac); }
 .sync-dot.err { background:var(--exam); }
 .sync-dot.loading { background:var(--mm); animation:pulse 1s ease-in-out infinite; }
@@ -44,7 +65,7 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .refresh-btn:active { background:var(--surface2); }
 
 .tab-bar { display:flex; gap:6px; padding:0 1.25rem; margin-bottom:1.25rem; }
-.tab-btn { flex:1; height:36px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.tab-btn { flex:1; height:36px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); cursor:pointer; }
 .tab-btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
 .tab-btn:active { transform:scale(0.97); }
 
@@ -78,6 +99,16 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .class-code { font-size:13px; font-weight:700; line-height:1; }
 .class-full { font-size:11px; font-weight:400; margin-top:3px; line-height:1.35; opacity:0.75; }
 .class-faculty { font-size:10px; font-weight:500; margin-top:5px; opacity:0.55; }
+
+/* CANCELLED state */
+.class-card.cancelled .class-code,
+.class-card.cancelled .class-full,
+.class-card.cancelled .class-faculty { text-decoration:line-through; opacity:0.45; }
+.class-card.cancelled { opacity:0.85; }
+.status-tag { display:inline-block; margin-top:7px; padding:2px 8px; border-radius:10px; font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+.status-tag.cancelled { background:var(--cancelled); color:#fff; }
+.status-tag.added { background:var(--added); color:#fff; }
+
 .lunch-card { flex:1; border-radius:10px; padding:10px 13px; background:var(--surface); border:1px dashed var(--border2); display:flex; align-items:center; gap:8px; }
 .lunch-dot { width:5px; height:5px; border-radius:50%; background:var(--dim); flex-shrink:0; }
 .lunch-text { font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.03em; text-transform:uppercase; }
@@ -90,7 +121,7 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .exam-sub { font-size:10px; font-weight:500; color:var(--exam); opacity:0.6; margin-top:4px; text-transform:uppercase; letter-spacing:0.08em; }
 .special-card { flex:1; border-radius:10px; padding:11px 13px; background:var(--fob-bg); border-left:3px solid var(--fob-b); }
 .special-text { font-size:13px; font-weight:600; color:var(--fob); }
-.now-badge { font-size:9px; font-weight:700; letter-spacing:0.1em; background:#111; color:#fff; padding:2px 7px; border-radius:4px; text-transform:uppercase; position:absolute; top:10px; right:10px; animation:pulse 2s ease-in-out infinite; }
+.now-badge { font-size:9px; font-weight:700; letter-spacing:0.1em; background:var(--text); color:var(--bg); padding:2px 7px; border-radius:4px; text-transform:uppercase; position:absolute; top:10px; right:10px; animation:pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .no-class { text-align:center; padding:3rem 0; }
 .no-class-icon { font-size:28px; margin-bottom:0.75rem; color:var(--dim); }
@@ -131,7 +162,7 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .cached-banner { background:var(--mm-bg); border:1px solid var(--mm-b); color:var(--mm); border-radius:8px; padding:8px 12px; margin:0 1.25rem 1rem; font-size:11px; text-align:center; }
 
 /* NOTES FEATURE */
-.class-notes-btn { display:inline-flex; align-items:center; gap:5px; margin-top:8px; padding:4px 10px; background:rgba(255,255,255,0.6); border:1px solid currentColor; border-radius:14px; font-family:inherit; font-size:10px; font-weight:600; color:inherit; cursor:pointer; opacity:0.85; letter-spacing:0.02em; }
+.class-notes-btn { display:inline-flex; align-items:center; gap:5px; margin-top:8px; padding:4px 10px; background:var(--backdrop-card); border:1px solid currentColor; border-radius:14px; font-family:inherit; font-size:10px; font-weight:600; color:inherit; cursor:pointer; opacity:0.85; letter-spacing:0.02em; }
 .class-notes-btn:active { transform:scale(0.95); opacity:1; }
 .class-notes-btn .badge { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 5px; background:currentColor; border-radius:8px; font-size:10px; font-weight:700; }
 .class-notes-btn .badge-num { color:#fff; }
@@ -161,7 +192,6 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .session-action-btn { background:none; border:1px solid var(--border2); color:var(--muted); font-family:inherit; font-size:10px; font-weight:500; padding:3px 9px; border-radius:6px; cursor:pointer; letter-spacing:0.02em; }
 .session-action-btn:active { background:var(--surface2); transform:scale(0.96); }
 .session-action-btn.danger { color:var(--exam); border-color:var(--exam-b); }
-
 .session-edit-textarea { width:100%; min-height:70px; padding:8px 10px; border:1px solid var(--border2); border-radius:6px; font-family:inherit; font-size:13px; background:var(--bg); color:var(--text); resize:vertical; box-sizing:border-box; line-height:1.5; }
 .session-edit-textarea:focus { outline:none; }
 .session-edit-actions { display:flex; gap:6px; margin-top:8px; }
@@ -176,14 +206,9 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 .add-form-row { display:flex; gap:8px; margin-top:10px; }
 .add-save-btn { flex:1; background:var(--text); color:var(--bg); border:none; padding:10px 16px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; letter-spacing:0.03em; }
 .add-save-btn:active { transform:scale(0.97); }
-.add-save-btn:disabled { opacity:0.4; cursor:not-allowed; }
 .add-cancel-btn { background:var(--surface); color:var(--muted); border:1px solid var(--border2); padding:10px 16px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:500; cursor:pointer; }
-
 .add-trigger-btn { width:100%; padding:11px 14px; background:var(--surface); border:1px dashed var(--border2); border-radius:10px; font-family:inherit; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer; letter-spacing:0.03em; }
 .add-trigger-btn:active { background:var(--surface2); }
-
-.next-class-info { font-size:11px; color:var(--muted); margin-top:6px; padding:6px 9px; background:rgba(0,0,0,0.03); border-radius:6px; display:inline-block; }
-.next-class-info b { color:var(--text); }
 
 .slot-anim-0{animation-delay:0.00s} .slot-anim-1{animation-delay:0.04s} .slot-anim-2{animation-delay:0.08s}
 .slot-anim-3{animation-delay:0.12s} .slot-anim-4{animation-delay:0.16s} .slot-anim-5{animation-delay:0.20s}
@@ -194,8 +219,13 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 <div class="app">
   <header>
     <div class="header-top">
-      <span class="tag">PGP BL07 · Term I</span>
-      <span class="class-badge">CR-A3</span>
+      <div class="header-left">
+        <span class="tag">PGP BL07 · Term I</span>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" title="Toggle theme">🌙</button>
+        <span class="class-badge">CR-A3</span>
+      </div>
     </div>
     <div class="date-display" id="header-date">
       <div class="date-day" id="date-day">—</div>
@@ -210,7 +240,7 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 
   <div class="sync-row">
     <div><span class="sync-dot loading" id="sync-dot"></span><span id="sync-text">Syncing…</span></div>
-    <button class="refresh-btn" onclick="loadCSV(true)">↻ Refresh</button>
+    <button class="refresh-btn" onclick="loadData(true)">↻ Refresh</button>
   </div>
 
   <div class="tab-bar">
@@ -228,7 +258,6 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
   </div>
 </div>
 
-<!-- NOTES OVERLAY -->
 <div class="notes-overlay" id="notes-overlay" onclick="closeNotesIfBackdrop(event)">
   <div class="notes-sheet" onclick="event.stopPropagation()">
     <div class="notes-header">
@@ -245,11 +274,35 @@ header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:lin
 
 <script>
 // ─────────── CONFIG ───────────
-const SECTION        = 'CR-A3';
+const SECTION = 'CR-A3';
 const SECTION_SUFFIX = 'A';
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYswdABqsqnLETAh0TKMsRsescez0I_II1SrZw2nyhpGco-7HyeZ5NhsZ7h2lE1GZGaj9lRD2HiTLR/pub?gid=0&single=true&output=csv';
-const CACHE_KEY  = 'pgp-bl07-csv-cache';
-const CACHE_TIME_KEY = 'pgp-bl07-csv-cache-time';
+const SHEET_ID = '1yOXJhK13UTsHUh6gdg-IYYxYyY_Cmsvj3iCfHpYKq5U';
+const SHEET_NAME = 'BL07 Term I Schedule';
+const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+const CACHE_KEY = 'pgp-bl07-data-cache-v2';
+const CACHE_TIME_KEY = 'pgp-bl07-data-cache-time-v2';
+const THEME_KEY = 'pgp-bl07-theme';
+
+// ─────────── THEME ───────────
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('theme-toggle').textContent = theme==='dark' ? '☀️' : '🌙';
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', theme==='dark' ? '#0e0e10' : '#f5f5f0');
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur==='dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem(THEME_KEY, next); } catch(e){}
+}
+(function initTheme(){
+  let theme;
+  try { theme = localStorage.getItem(THEME_KEY); } catch(e){}
+  if(!theme){
+    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(theme);
+})();
 
 // ─────────── STATIC REFS ───────────
 const COLORS = {
@@ -293,43 +346,75 @@ let TERM_E = '2026-06-05';
 let idx = 0;
 let currentTab = 'schedule';
 
-// ─────────── CSV PARSING ───────────
-function parseCSV(text) {
-  // Robust CSV parser handling quoted fields, escaped quotes, newlines in quotes
-  const rows=[]; let row=[]; let cell=''; let inQ=false;
-  for(let i=0;i<text.length;i++){
-    const c=text[i], n=text[i+1];
-    if(inQ){
-      if(c==='"' && n==='"'){ cell+='"'; i++; }
-      else if(c==='"'){ inQ=false; }
-      else { cell+=c; }
-    } else {
-      if(c==='"'){ inQ=true; }
-      else if(c===','){ row.push(cell); cell=''; }
-      else if(c==='\r'){ /* skip */ }
-      else if(c==='\n'){ row.push(cell); rows.push(row); row=[]; cell=''; }
-      else { cell+=c; }
-    }
-  }
-  if(cell.length>0 || row.length>0){ row.push(cell); rows.push(row); }
-  return rows;
+// ─────────── COLOR DETECTION ───────────
+// gviz returns a #RRGGBB color. Detect "red-ish" (cancelled) vs "green-ish" (added).
+function classifyColor(hex){
+  if(!hex || typeof hex !== 'string') return null;
+  // Normalize: strip # and handle 3- or 6-char
+  let h = hex.replace('#','').trim();
+  if(h.length === 3) h = h.split('').map(c=>c+c).join('');
+  if(h.length !== 6) return null;
+  const r = parseInt(h.substr(0,2),16);
+  const g = parseInt(h.substr(2,2),16);
+  const b = parseInt(h.substr(4,2),16);
+  if(isNaN(r)||isNaN(g)||isNaN(b)) return null;
+  // Pure white or near-white = no marking
+  if(r>240 && g>240 && b>240) return null;
+  // Red-ish: high R, low G, low B
+  if(r > 180 && g < 160 && b < 160 && r > g+30 && r > b+30) return 'cancelled';
+  // Green-ish: high G, low-to-mid R, low-to-mid B
+  if(g > 160 && r < 200 && b < 200 && g > r+20 && g > b+20) return 'added';
+  return null;
 }
 
-// ─────────── DATE PARSING ───────────
+// ─────────── GVIZ FETCH ───────────
+async function fetchSheetData(){
+  const url = GVIZ_URL + '&_t=' + Date.now();
+  const proxies = [
+    url,
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+    'https://corsproxy.io/?' + encodeURIComponent(url),
+  ];
+  let lastErr;
+  for(const u of proxies){
+    try {
+      const res = await fetch(u, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const text = await res.text();
+      const parsed = parseGvizResponse(text);
+      if(parsed) return parsed;
+    } catch(e){
+      console.warn('Fetch failed for', u.slice(0,60), e.message);
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error('All fetch attempts failed');
+}
+
+function parseGvizResponse(text){
+  // gviz wraps JSON in: google.visualization.Query.setResponse({...});
+  // Or sometimes a different prefix. Find first { and last }.
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  if(start === -1 || end === -1) throw new Error('Invalid gviz response');
+  const json = text.slice(start, end+1);
+  const data = JSON.parse(json);
+  if(!data.table) throw new Error('No table in gviz response');
+  return data.table;
+}
+
+// ─────────── PARSE TABLE ───────────
 const MONTH_MAP = {
-  'january':0,'february':1,'march':2,'april':3,'may':4,'june':5,
-  'july':6,'august':7,'september':8,'october':9,'november':10,'december':11,
-  'jan':0,'feb':1,'mar':2,'apr':3,'jun':5,'jul':6,'aug':7,'sep':8,'sept':8,'oct':9,'nov':10,'dec':11,
+  january:0,february:1,march:2,april:3,may:4,june:5,
+  july:6,august:7,september:8,october:9,november:10,december:11,
+  jan:0,feb:1,mar:2,apr:3,jun:5,jul:6,aug:7,sep:8,sept:8,oct:9,nov:10,dec:11,
 };
 
-function parseDateCell(s) {
-  // Expected format: "Wednesday, 22 April, 2026" or "Friday, 1 May, 2026" etc.
+function parseDateCell(s){
   if(!s) return null;
-  s = s.trim();
+  s = String(s).trim();
   if(!s) return null;
-  // Remove day-of-week prefix if present (anything before the first comma)
   const parts = s.split(',').map(p => p.trim()).filter(Boolean);
-  // parts could be ["Wednesday", "22 April", "2026"] OR ["22 April 2026"] etc.
   let day, month, year;
   if(parts.length >= 3){
     const dm = parts[1].split(/\s+/);
@@ -337,43 +422,68 @@ function parseDateCell(s) {
     month = MONTH_MAP[dm[1]?.toLowerCase()];
     year = parseInt(parts[2], 10);
   } else if(parts.length === 2){
-    // "22 April" + "2026"
     const dm = parts[0].split(/\s+/);
     day = parseInt(dm[0], 10);
     month = MONTH_MAP[dm[1]?.toLowerCase()];
     year = parseInt(parts[1], 10);
   } else {
-    // Single token like "22 April 2026"
     const tok = s.split(/\s+/);
     day = parseInt(tok[0], 10);
     month = MONTH_MAP[tok[1]?.toLowerCase()];
     year = parseInt(tok[2], 10);
   }
   if(isNaN(day) || month === undefined || isNaN(year)) return null;
-  const mm = String(month + 1).padStart(2, '0');
-  const dd = String(day).padStart(2, '0');
-  return `${year}-${mm}-${dd}`;
+  return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
 }
 
-// ─────────── TIME PARSING ───────────
-function normalizeTime(s) {
-  // Input: "9.15 -10.30" or "10.45-12.00" or similar → "9.15-10.30"
+function normalizeTime(s){
   if(!s) return '';
-  return s.replace(/\s+/g,'').trim();
+  return String(s).replace(/\s+/g,'').trim();
 }
 
-function parseScheduleCSV(rows) {
-  // Find the header row that contains "Time" AND a section header (CR-A3 / CR-A4)
-  let headerIdx = -1;
-  let colTime = -1, colA3 = -1, colA4 = -1;
-  for(let i=0;i<Math.min(rows.length,25);i++){
-    const r = (rows[i]||[]).map(c => (c||'').trim());
+function parseTable(table){
+  // table.cols = column metadata; table.rows = array of rows; row.c = array of cells; cell.v = value, cell.f = formatted
+  // Each cell can have a property "p" containing format hints, but background color is usually NOT in gviz JSON by default.
+  // gviz returns "p" property only when explicitly requested. The standard response includes f (formatted text).
+  // To get colors, we need tqx=out:json with table format and cells need their formatting in p.style or format.
+  // Actually gviz returns cell.p.style with backgroundColor IF formatting is set on cells.
+
+  const rows = table.rows || [];
+  // Normalize: convert to 2D arrays of {value, color}
+  const grid = rows.map(r => {
+    const cells = r.c || [];
+    return cells.map(c => {
+      if(!c) return {value:'', color:null};
+      let value = '';
+      if(c.f != null) value = String(c.f);
+      else if(c.v != null) value = String(c.v);
+      // Color from p.style (CSS-like string)
+      let color = null;
+      if(c.p && c.p.style){
+        const m = c.p.style.match(/background-color:\s*([^;]+)/i);
+        if(m) color = m[1].trim();
+      }
+      // Convert rgb(r,g,b) to hex
+      if(color && color.startsWith('rgb')){
+        const m = color.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+        if(m){
+          color = '#' + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,'0')).join('');
+        }
+      }
+      return {value, color};
+    });
+  });
+
+  // Find header row containing "Time" and section header
+  let headerIdx = -1, colTime=-1, colA3=-1, colA4=-1;
+  for(let i=0; i<Math.min(grid.length,30); i++){
+    const r = grid[i].map(c => (c.value||'').trim());
     const hasTime = r.some(c => c.toLowerCase() === 'time');
     const hasA3   = r.some(c => /^cr[-\s]?a3$/i.test(c));
     const hasA4   = r.some(c => /^cr[-\s]?a4$/i.test(c));
     if(hasTime && (hasA3 || hasA4)){
       headerIdx = i;
-      for(let j=0;j<r.length;j++){
+      for(let j=0; j<r.length; j++){
         if(r[j].toLowerCase() === 'time') colTime = j;
         if(/^cr[-\s]?a3$/i.test(r[j])) colA3 = j;
         if(/^cr[-\s]?a4$/i.test(r[j])) colA4 = j;
@@ -381,88 +491,67 @@ function parseScheduleCSV(rows) {
       break;
     }
   }
-  if(headerIdx === -1){
-    throw new Error('Could not locate header row with Time / CR-A3 / CR-A4 columns.');
-  }
-  // Date column is whichever column is before the Time column (usually colTime - 1, could be 0)
+  if(headerIdx === -1) throw new Error('Could not locate header row in sheet.');
   const colDate = colTime > 0 ? colTime - 1 : 0;
   const colSection = SECTION === 'CR-A3' ? colA3 : colA4;
-  if(colSection === -1){
-    throw new Error('Could not find ' + SECTION + ' column in sheet');
-  }
+  if(colSection === -1) throw new Error('Could not find ' + SECTION + ' column.');
 
-  // Track "current date" so merged-cell rows (blank date col) inherit
   let currentDate = null;
-  const schedule = [];
   const dateToSlots = {};
+  const schedule = [];
 
-  for(let i = headerIdx + 1; i < rows.length; i++){
-    const r = rows[i];
-    if(!r || !r.length) continue;
-
-    const dateCell = (r[colDate] || '').trim();
-    const timeCell = (r[colTime] || '').trim();
-    const cellVal  = (r[colSection] || '').trim();
+  for(let i = headerIdx + 1; i < grid.length; i++){
+    const r = grid[i];
+    if(!r) continue;
+    const dateCell = (r[colDate]?.value || '').trim();
+    const timeCell = (r[colTime]?.value || '').trim();
+    const sectionCell = r[colSection];
+    const cellVal = (sectionCell?.value || '').trim();
+    const cellColor = sectionCell?.color || null;
+    const status = classifyColor(cellColor);
 
     if(dateCell){
       const parsed = parseDateCell(dateCell);
       if(parsed) currentDate = parsed;
     }
 
-    // Detect "End Term Exam" or similar special full-row events (time cell may contain it)
     if(timeCell && /end term exam/i.test(timeCell)){
-      if(!currentDate && dateCell){ currentDate = parseDateCell(dateCell); }
       if(currentDate){
         if(!dateToSlots[currentDate]) dateToSlots[currentDate] = [];
         dateToSlots[currentDate].push({t:'All day', c:'__EXAM__'});
       }
       continue;
     }
-
     if(!currentDate || !timeCell) continue;
-
     const t = normalizeTime(timeCell);
     if(!t) continue;
 
-    // Classify cell content
     let slot = null;
     if(/^lunch/i.test(timeCell.toLowerCase().trim()) || /lunch break/i.test(cellVal)){
       slot = {t, c:'__LUNCH__'};
     } else if(!cellVal){
-      continue; // empty slot — skip
+      continue;
     } else if(/workshop/i.test(cellVal)){
-      // Preserve original workshop text; render as __WORKSHOP__
-      slot = {t, c:'__WORKSHOP__' + cellVal};
+      slot = {t, c:'__WORKSHOP__' + cellVal, status};
     } else if(/library\s*interaction/i.test(cellVal)){
-      slot = {t, c:'__SPECIAL__Library Interaction'};
+      slot = {t, c:'__SPECIAL__Library Interaction', status};
     } else if(/end term exam/i.test(cellVal)){
       slot = {t:'All day', c:'__EXAM__'};
     } else {
-      slot = {t, c:cellVal};
+      slot = {t, c:cellVal, status};
     }
 
     if(slot){
       if(!dateToSlots[currentDate]) dateToSlots[currentDate] = [];
-      // Also detect lunch by time convention 13.30-14.30 even if cell empty — but only insert once per day
       dateToSlots[currentDate].push(slot);
     }
   }
 
-  // Ensure every scheduled day with non-lunch content has a lunch row if time 13.30-14.30 is missing but other slots exist after 13.30
-  // (Sheet typically has a lunch row; skip auto-insertion to avoid duplicates)
-
-  // Build ordered array
   const sortedDates = Object.keys(dateToSlots).sort();
   sortedDates.forEach(d => {
-    // Sort slots by start time
-    dateToSlots[d].sort((a,b) => {
-      const ta = parseTm((a.t.split('-')[0] || '0').trim());
-      const tb = parseTm((b.t.split('-')[0] || '0').trim());
-      return ta - tb;
-    });
+    dateToSlots[d].sort((a,b) => parseTm((a.t.split('-')[0]||'0').trim()) - parseTm((b.t.split('-')[0]||'0').trim()));
     schedule.push({d, slots:dateToSlots[d]});
   });
-
   return schedule;
 }
 
@@ -489,8 +578,7 @@ function isNow(t){
 }
 function getCode(c){
   if(!c||c.startsWith('__')) return null;
-  const base=c.split('(')[0].trim();
-  return base.replace(/-[AB]$/i,'').trim();
+  return c.split('(')[0].trim().replace(/-[AB]$/i,'').trim();
 }
 function getFaculty(c){
   const code=getCode(c); if(!code) return '';
@@ -507,19 +595,14 @@ function getFaculty(c){
 }
 function toDS(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
 
-// ─────────── STATS / RANGES ───────────
-function computeTermRange(){
-  if(DATES.length === 0) return;
-  TERM_S = DATES[0];
-  TERM_E = DATES[DATES.length-1];
-}
+function computeTermRange(){ if(DATES.length === 0) return; TERM_S = DATES[0]; TERM_E = DATES[DATES.length-1]; }
 function todayIdx(){ const t=toDS(new Date()); const i=DATES.findIndex(d=>d>=t); return i===-1?DATES.length-1:i; }
 function termPct(){ const n=Date.now(),s=new Date(TERM_S).getTime(),e=new Date(TERM_E).getTime(); if(e<=s) return 0; return Math.max(0,Math.min(100,Math.round((n-s)/(e-s)*100))); }
 function daysLeft(){ const t=new Date();t.setHours(0,0,0,0); const e=new Date(TERM_E);e.setHours(0,0,0,0); return Math.max(0,Math.ceil((e-t)/86400000)); }
 function countMins(slots){
   let m=0;
   slots.forEach(s=>{
-    if(s.c.startsWith('__')) return;
+    if(s.c.startsWith('__')||s.status==='cancelled') return;
     const p=s.t.split('-'); if(p.length<2) return;
     try{ m+=parseTm(p[1].trim())-parseTm(p[0].trim()); }catch(e){}
   });
@@ -554,6 +637,8 @@ function renderScheduleShell(){
         <div class="leg"><div class="leg-dot" style="background:var(--mm)"></div><span class="leg-text">MM</span></div>
         <div class="leg"><div class="leg-dot" style="background:var(--efaac)"></div><span class="leg-text">EFAAC</span></div>
         <div class="leg"><div class="leg-dot" style="background:var(--fob)"></div><span class="leg-text">FOB</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--cancelled)"></div><span class="leg-text">Cancelled</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--added)"></div><span class="leg-text">Added</span></div>
       </div>
     </div>
     <div id="holidays-view" style="display:none">
@@ -568,7 +653,7 @@ function renderScheduleShell(){
 
 function render(){
   if(!DATES.length){
-    document.getElementById('main-content').innerHTML = `<div class="error-screen"><div class="error-title">No schedule data</div><div class="error-msg">The sheet returned no rows. Check that the sheet is published and has data.</div></div>`;
+    document.getElementById('main-content').innerHTML = `<div class="error-screen"><div class="error-title">No schedule data</div><div class="error-msg">The sheet returned no rows.</div></div>`;
     return;
   }
   if(!document.getElementById('schedule-view')) renderScheduleShell();
@@ -587,7 +672,7 @@ function render(){
   document.getElementById('progress-fill').style.width = pct + '%';
 
   const slots = MAP[ds] || [];
-  const classes = slots.filter(s=>!s.c.startsWith('__')).length;
+  const classes = slots.filter(s=>!s.c.startsWith('__') && s.status!=='cancelled').length;
   const mins = countMins(slots);
   document.getElementById('stat-classes').textContent = classes;
   document.getElementById('stat-hours').textContent = mins>0 ? fmtMins(mins) : '—';
@@ -611,9 +696,10 @@ function render(){
       </div>`;
     } else if(slot.c.startsWith('__WORKSHOP__')){
       const det = slot.c.replace('__WORKSHOP__','').split('\n');
+      const tag = slot.status==='cancelled' ? '<span class="status-tag cancelled">Cancelled</span>' : slot.status==='added' ? '<span class="status-tag added">Recently Added</span>' : '';
       html += `<div class="slot ${anim}">
         <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
-        <div class="workshop-card"><div class="workshop-label">Workshop</div><div class="workshop-title">${det[0]||''}</div>${det[1]?`<div class="workshop-sub">${det[1]}</div>`:''}</div>
+        <div class="workshop-card ${slot.status==='cancelled'?'cancelled':''}"><div class="workshop-label">Workshop</div><div class="workshop-title">${det[0]||''}</div>${det[1]?`<div class="workshop-sub">${det[1]}</div>`:''} ${tag}</div>
       </div>`;
     } else if(slot.c==='__EXAM__'){
       html += `<div class="slot ${anim}">
@@ -632,12 +718,15 @@ function render(){
       const full = FULL[code] || code;
       const fac = getFaculty(slot.c);
       const noteCount = getNoteCount(code);
+      const cancelledCls = slot.status==='cancelled' ? 'cancelled' : '';
+      const tag = slot.status==='cancelled' ? '<span class="status-tag cancelled">Cancelled</span>' : slot.status==='added' ? '<span class="status-tag added">Recently Added</span>' : '';
       html += `<div class="slot ${anim}">
         <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
-        <div class="class-card" style="background:${col.bg};border-left-color:${col.border};color:${col.color};">
+        <div class="class-card ${cancelledCls}" style="background:${col.bg};border-left-color:${col.border};color:${col.color};">
           <div class="class-code">${code}</div>
           <div class="class-full">${full}</div>
           ${fac?`<div class="class-faculty">${fac}</div>`:''}
+          ${tag}
           <button class="class-notes-btn" onclick="openNotes('${code}','${DATES[idx]}')" style="color:${col.color};">📝 Notes${noteCount>0?` <span class="badge"><span class="badge-num">${noteCount}</span></span>`:''}</button>
           ${now?'<span class="now-badge">Now</span>':''}
         </div>
@@ -649,52 +738,29 @@ function render(){
 
 function renderHolidays(){
   const body = document.getElementById('holidays-body');
-  if(!body){
-    console.error('holidays-body element not found');
-    return;
-  }
-
-  if(!DATES.length){
-    body.innerHTML = '<div class="no-class"><div class="no-class-text">Schedule not loaded yet</div><div class="no-class-sub">Wait for sync to finish, then re-open this tab</div></div>';
-    return;
-  }
-
-  // Use FIXED term range — from first date in sheet to last date in sheet
-  // This ensures we show free days between classes regardless of what the sheet contains
-  const termStart = DATES[0];
-  const termEnd   = DATES[DATES.length-1];
-
+  if(!body) return;
+  if(!DATES.length){ body.innerHTML='<div class="no-class"><div class="no-class-text">Schedule not loaded yet</div></div>'; return; }
+  const termStart = DATES[0], termEnd = DATES[DATES.length-1];
   const DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const scheduled = new Set(DATES);
   const free = [];
   const today = toDS(new Date());
-
-  // Iterate day by day from termStart to termEnd (inclusive)
   const [sy,sm,sd] = termStart.split('-').map(Number);
   const [ey,em,ed] = termEnd.split('-').map(Number);
   const startDt = new Date(sy, sm-1, sd);
-  const endDt   = new Date(ey, em-1, ed);
-
+  const endDt = new Date(ey, em-1, ed);
   for(let dt = new Date(startDt); dt <= endDt; dt.setDate(dt.getDate()+1)){
     const ds = toDS(dt);
-    if(!scheduled.has(ds)){
-      free.push(new Date(dt));
-    }
+    if(!scheduled.has(ds)) free.push(new Date(dt));
   }
-
-  if(free.length === 0){
-    body.innerHTML = '<div class="no-class"><div class="no-class-text">No free days</div><div class="no-class-sub">All days in term are scheduled</div></div>';
-    return;
-  }
-
+  if(free.length === 0){ body.innerHTML='<div class="no-class"><div class="no-class-text">No free days</div></div>'; return; }
   const byMonth = {};
   free.forEach(dt => {
     const k = `${dt.getFullYear()}-${String(dt.getMonth()).padStart(2,'0')}`;
-    if(!byMonth[k]) byMonth[k] = {label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`, days:[], sortKey:k};
+    if(!byMonth[k]) byMonth[k] = {label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`, days:[]};
     byMonth[k].days.push(dt);
   });
-
   let html='';
   Object.keys(byMonth).sort().forEach(k => {
     const g = byMonth[k];
@@ -720,25 +786,16 @@ function renderHolidays(){
 
 function switchTab(tab){
   currentTab = tab;
-  const tabSchedule = document.getElementById('tab-schedule');
-  const tabHolidays = document.getElementById('tab-holidays');
-  if(tabSchedule) tabSchedule.classList.toggle('active', tab==='schedule');
-  if(tabHolidays) tabHolidays.classList.toggle('active', tab==='holidays');
-
-  const sv = document.getElementById('schedule-view');
-  const hv = document.getElementById('holidays-view');
+  const ts=document.getElementById('tab-schedule'), th=document.getElementById('tab-holidays');
+  if(ts) ts.classList.toggle('active', tab==='schedule');
+  if(th) th.classList.toggle('active', tab==='holidays');
+  const sv = document.getElementById('schedule-view'), hv = document.getElementById('holidays-view');
   if(sv) sv.style.display = tab==='schedule' ? '' : 'none';
   if(hv) hv.style.display = tab==='holidays' ? '' : 'none';
-
-  const headerDate = document.getElementById('header-date');
-  const dayNavRow  = document.getElementById('day-nav-row');
-  if(headerDate) headerDate.style.display = tab==='schedule' ? '' : 'none';
-  if(dayNavRow)  dayNavRow.style.display  = tab==='schedule' ? '' : 'none';
-
-  if(tab==='holidays'){
-    // Always re-render when switching to holidays tab
-    renderHolidays();
-  }
+  const hd=document.getElementById('header-date'), dn=document.getElementById('day-nav-row');
+  if(hd) hd.style.display = tab==='schedule' ? '' : 'none';
+  if(dn) dn.style.display = tab==='schedule' ? '' : 'none';
+  if(tab==='holidays') renderHolidays();
 }
 
 function changeDay(dir){ idx=Math.max(0,Math.min(DATES.length-1,idx+dir)); render(); }
@@ -746,10 +803,9 @@ function goToday(){ idx=todayIdx(); render(); }
 
 // ─────────── SYNC STATUS ───────────
 function setSyncStatus(state, text){
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-text');
-  dot.className = 'sync-dot ' + state;
-  txt.textContent = text;
+  const dot = document.getElementById('sync-dot'), txt = document.getElementById('sync-text');
+  if(dot) dot.className = 'sync-dot ' + state;
+  if(txt) txt.textContent = text;
 }
 function fmtTimeAgo(ms){
   const s = Math.floor((Date.now()-ms)/1000);
@@ -759,52 +815,20 @@ function fmtTimeAgo(ms){
   return `${Math.floor(s/86400)}d ago`;
 }
 
-// ─────────── LOAD CSV ───────────
-// Multiple fetch strategies. Whichever works first wins.
-async function fetchStrategy(name, url){
-  const res = await fetch(url, {cache:'no-store', redirect:'follow'});
-  if(!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
-  const text = await res.text();
-  if(!text || text.length < 20) throw new Error(`${name}: empty response`);
-  if(!text.includes(',') && !text.toLowerCase().includes('time')) throw new Error(`${name}: response does not look like CSV`);
-  return text;
-}
-
-async function tryAllFetches(){
-  const bust = '_t=' + Date.now();
-  const sep = CSV_URL.includes('?') ? '&' : '?';
-  const directUrl = CSV_URL + sep + bust;
-  const strategies = [
-    ['direct', directUrl],
-    ['allorigins', 'https://api.allorigins.win/raw?url=' + encodeURIComponent(directUrl)],
-    ['corsproxy.io', 'https://corsproxy.io/?' + encodeURIComponent(directUrl)],
-    ['thingproxy', 'https://thingproxy.freeboard.io/fetch/' + directUrl],
-  ];
-  const errors = [];
-  for(const [name, url] of strategies){
-    try {
-      const text = await fetchStrategy(name, url);
-      console.log(`[sync] ${name} succeeded`);
-      return {text, via:name};
-    } catch(e){
-      console.warn(`[sync] ${name} failed:`, e.message);
-      errors.push(`${name}: ${e.message}`);
-    }
-  }
-  throw new Error('All fetch strategies failed:\n' + errors.join('\n'));
-}
-
-async function loadCSV(forceReload=false){
+// ─────────── LOAD DATA ───────────
+async function loadData(forceReload=false){
   setSyncStatus('loading','Syncing…');
   document.getElementById('cached-banner').style.display='none';
 
   try {
-    const {text, via} = await tryAllFetches();
-    const rows = parseCSV(text);
-    const schedule = parseScheduleCSV(rows);
-    if(!schedule.length) throw new Error('CSV fetched but no schedule rows parsed. Sheet structure may have changed.');
+    const table = await fetchSheetData();
+    const schedule = parseTable(table);
+    if(!schedule.length) throw new Error('No schedule rows parsed.');
 
-    try { localStorage.setItem(CACHE_KEY, text); localStorage.setItem(CACHE_TIME_KEY, String(Date.now())); } catch(e) {}
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(schedule));
+      localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+    } catch(e) {}
 
     SCHEDULE = schedule;
     MAP = {}; SCHEDULE.forEach(d => MAP[d.d] = d.slots);
@@ -812,34 +836,31 @@ async function loadCSV(forceReload=false){
     computeTermRange();
     idx = todayIdx();
 
-    const label = via === 'direct' ? 'Live · just synced' : `Live · via ${via}`;
-    setSyncStatus('ok', label);
+    setSyncStatus('ok', 'Live · just synced');
     renderScheduleShell();
-    if(currentTab==='holidays'){ switchTab('holidays'); } else { render(); }
+    if(currentTab==='holidays') switchTab('holidays'); else render();
     return;
   } catch(err){
-    console.warn('All CSV fetches failed:', err);
+    console.error('Live fetch failed:', err);
   }
 
-  // Fallback to cache
+  // Cache fallback
   try {
-    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedRaw = localStorage.getItem(CACHE_KEY);
     const cachedTime = parseInt(localStorage.getItem(CACHE_TIME_KEY)||'0',10);
-    if(cached){
-      const rows = parseCSV(cached);
-      const schedule = parseScheduleCSV(rows);
-      if(schedule.length){
+    if(cachedRaw){
+      const schedule = JSON.parse(cachedRaw);
+      if(schedule && schedule.length){
         SCHEDULE = schedule;
         MAP = {}; SCHEDULE.forEach(d => MAP[d.d] = d.slots);
         DATES = SCHEDULE.map(d => d.d);
         computeTermRange();
         idx = todayIdx();
-
         setSyncStatus('err', `Offline · cached ${fmtTimeAgo(cachedTime)}`);
         document.getElementById('cached-banner').style.display='block';
-        document.getElementById('cached-banner').textContent = `⚠ Showing cached data from ${fmtTimeAgo(cachedTime)}. Live sync failed — check connection.`;
+        document.getElementById('cached-banner').textContent = `⚠ Showing cached data from ${fmtTimeAgo(cachedTime)}.`;
         renderScheduleShell();
-        if(currentTab==='holidays'){ switchTab('holidays'); } else { render(); }
+        if(currentTab==='holidays') switchTab('holidays'); else render();
         return;
       }
     }
@@ -849,12 +870,12 @@ async function loadCSV(forceReload=false){
   document.getElementById('main-content').innerHTML = `
     <div class="error-screen">
       <div class="error-title">Couldn't load schedule</div>
-      <div class="error-msg">Could not reach the Google Sheet via any route, and no cached copy is available.<br><br>Common causes:<br>• Sheet not published to web as CSV<br>• Wrong CSV URL<br>• No internet connection<br><br>Open the browser console to see which routes failed.</div>
-      <button class="retry-btn" onclick="loadCSV(true)">Retry</button>
+      <div class="error-msg">Could not reach the Google Sheet, and no cached copy is available. Check your connection and try again.</div>
+      <button class="retry-btn" onclick="loadData(true)">Retry</button>
     </div>`;
 }
 
-// ─────────── NOTES FEATURE ───────────
+// ─────────── NOTES ───────────
 const NOTES_KEY_PREFIX = 'pgp-bl07-notes-' + SECTION + '-';
 let activeNotesCode = null;
 let activeNotesDate = null;
@@ -865,57 +886,37 @@ function loadNotes(code){
     if(!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
-  } catch(e){
-    console.warn('Failed to load notes for', code, e);
-    return [];
-  }
+  } catch(e){ return []; }
 }
-
 function saveNotes(code, notes){
-  try {
-    localStorage.setItem(NOTES_KEY_PREFIX + code, JSON.stringify(notes));
-    return true;
-  } catch(e){
-    console.error('Failed to save notes:', e);
-    alert('Could not save note (storage may be full)');
-    return false;
-  }
+  try { localStorage.setItem(NOTES_KEY_PREFIX + code, JSON.stringify(notes)); return true; }
+  catch(e){ alert('Could not save note (storage full?)'); return false; }
 }
+function getNoteCount(code){ return loadNotes(code).length; }
 
-function getNoteCount(code){
-  return loadNotes(code).length;
-}
-
-// Find next class date for a given course code
 function findNextClassDate(code, fromDate){
   for(const day of SCHEDULE){
     if(day.d <= fromDate) continue;
     for(const s of day.slots){
-      if(s.c.startsWith('__')) continue;
+      if(s.c.startsWith('__') || s.status==='cancelled') continue;
       if(getCode(s.c) === code) return day.d;
     }
   }
   return null;
 }
-
-// Find what session number TODAY is for a course (1-indexed by chronological occurrence)
 function findSessionNumber(code, onDate){
   let count = 0;
   for(const day of SCHEDULE){
     let counted = false;
     for(const s of day.slots){
-      if(s.c.startsWith('__')) continue;
-      if(getCode(s.c) === code && !counted){
-        count++;
-        counted = true;
-      }
+      if(s.c.startsWith('__') || s.status==='cancelled') continue;
+      if(getCode(s.c) === code && !counted){ count++; counted = true; }
     }
     if(day.d === onDate && counted) return count;
     if(day.d > onDate) break;
   }
   return count > 0 ? count : 1;
 }
-
 function fmtNiceDate(ds){
   const [y,mo,d] = ds.split('-').map(Number);
   const dt = new Date(y, mo-1, d);
@@ -923,7 +924,6 @@ function fmtNiceDate(ds){
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return `${DAYS[dt.getDay()]}, ${d} ${MONTHS[mo-1]}`;
 }
-
 function fmtDaysFromNow(ds){
   const today = new Date(); today.setHours(0,0,0,0);
   const [y,mo,d] = ds.split('-').map(Number);
@@ -936,68 +936,53 @@ function fmtDaysFromNow(ds){
 }
 
 function openNotes(code, currentDate){
-  activeNotesCode = code;
-  activeNotesDate = currentDate;
-  const overlay = document.getElementById('notes-overlay');
-  overlay.classList.add('show');
+  activeNotesCode = code; activeNotesDate = currentDate;
+  document.getElementById('notes-overlay').classList.add('show');
   renderNotesContent();
-  // Lock body scroll
   document.body.style.overflow = 'hidden';
 }
-
 function closeNotes(){
   document.getElementById('notes-overlay').classList.remove('show');
   document.body.style.overflow = '';
-  activeNotesCode = null;
-  activeNotesDate = null;
-  // Re-render schedule to update note count badges
+  activeNotesCode = null; activeNotesDate = null;
   if(DATES.length) render();
 }
+function closeNotesIfBackdrop(e){ if(e.target.id === 'notes-overlay') closeNotes(); }
 
-function closeNotesIfBackdrop(e){
-  if(e.target.id === 'notes-overlay') closeNotes();
-}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 
 function renderNotesContent(){
-  const code = activeNotesCode;
-  const date = activeNotesDate;
+  const code = activeNotesCode, date = activeNotesDate;
   const fullName = FULL[code] || code;
   const faculty = FACULTY[code] || (code==='EFAAC' ? 'Prof. Jijo Lukose / Prof. Qambar Abidi' : '');
-
   document.getElementById('notes-title').textContent = `${code} — Course Journal`;
   document.getElementById('notes-sub').textContent = fullName + (faculty ? ' · ' + faculty : '');
 
   const notes = loadNotes(code);
   const body = document.getElementById('notes-body');
   if(notes.length === 0){
-    body.innerHTML = `
-      <div class="notes-empty">
-        No sessions logged yet
-        <div class="notes-empty-sub">Add your first note below to start tracking</div>
-      </div>`;
+    body.innerHTML = `<div class="notes-empty">No sessions logged yet<div class="notes-empty-sub">Add your first note below to start tracking</div></div>`;
   } else {
-    // Show most recent first; preserve original index for edit/delete
     const indexed = notes.map((n,i)=>({...n, _i:i}));
     indexed.sort((a,b) => (b.date+String(b.session).padStart(3,'0')+b.savedAt).localeCompare(a.date+String(a.session).padStart(3,'0')+a.savedAt));
     let html = '';
     indexed.forEach((n,renderIdx) => {
       const col = COLORS[code] || {color:'var(--fob)'};
       const savedLabel = n.savedAt ? `Saved ${new Date(n.savedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}${n.editedAt ? ` · edited ${new Date(n.editedAt).toLocaleString('en-IN', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}` : ''}` : '';
-      html += `
-        <div class="session-item" id="session-${n._i}" style="border-left:3px solid ${col.color || 'var(--fob)'};animation-delay:${renderIdx*0.04}s">
-          <div class="session-head">
-            <div class="session-num" style="color:${col.color || 'var(--fob)'}">Session ${n.session}</div>
-            <div class="session-date">${fmtNiceDate(n.date)}</div>
+      html += `<div class="session-item" id="session-${n._i}" style="border-left:3px solid ${col.color};animation-delay:${renderIdx*0.04}s">
+        <div class="session-head">
+          <div class="session-num" style="color:${col.color}">Session ${n.session}</div>
+          <div class="session-date">${fmtNiceDate(n.date)}</div>
+        </div>
+        <div class="session-text">${escapeHtml(n.text)}</div>
+        <div class="session-meta-row">
+          <div class="session-saved">${savedLabel}</div>
+          <div class="session-actions">
+            <button class="session-action-btn" onclick="editSession(${n._i})">Edit</button>
+            <button class="session-action-btn danger" onclick="deleteSession(${n._i})">Delete</button>
           </div>
-          <div class="session-text" id="session-text-${n._i}">${escapeHtml(n.text)}</div>
-          <div class="session-meta-row">
-            <div class="session-saved">${savedLabel}</div>
-            <div class="session-actions">
-              <button class="session-action-btn" onclick="editSession(${n._i})">Edit</button>
-              <button class="session-action-btn danger" onclick="deleteSession(${n._i})">Delete</button>
-            </div>
-          </div>
-        </div>`;
+        </div>
+      </div>`;
     });
     body.innerHTML = html;
   }
@@ -1009,28 +994,22 @@ function editSession(noteIdx){
   const notes = loadNotes(code);
   const n = notes[noteIdx];
   if(!n) return;
-
   const col = COLORS[code] || {color:'var(--fob)'};
   const sessionEl = document.getElementById('session-' + noteIdx);
   if(!sessionEl) return;
-
   sessionEl.innerHTML = `
     <div class="session-head">
-      <div class="session-num" style="color:${col.color || 'var(--fob)'}">Session ${n.session}</div>
+      <div class="session-num" style="color:${col.color}">Session ${n.session}</div>
       <div class="session-date">${fmtNiceDate(n.date)}</div>
     </div>
-    <textarea class="session-edit-textarea" id="edit-textarea-${noteIdx}" style="border-color:${col.color || 'var(--border2)'}">${escapeHtml(n.text)}</textarea>
+    <textarea class="session-edit-textarea" id="edit-textarea-${noteIdx}" style="border-color:${col.color}">${escapeHtml(n.text)}</textarea>
     <div class="session-edit-actions">
       <button class="session-edit-cancel" onclick="renderNotesContent()">Cancel</button>
       <button class="session-edit-save" onclick="saveEditedSession(${noteIdx})">Save changes</button>
-    </div>
-  `;
+    </div>`;
   const ta = document.getElementById('edit-textarea-' + noteIdx);
-  ta.focus();
-  // Move cursor to end
-  ta.setSelectionRange(ta.value.length, ta.value.length);
+  ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
 }
-
 function saveEditedSession(noteIdx){
   const text = document.getElementById('edit-textarea-' + noteIdx).value.trim();
   if(!text){ alert('Note cannot be empty'); return; }
@@ -1039,88 +1018,59 @@ function saveEditedSession(noteIdx){
   if(!notes[noteIdx]) return;
   notes[noteIdx].text = text;
   notes[noteIdx].editedAt = Date.now();
-  if(saveNotes(code, notes)){
-    renderNotesContent();
-  }
+  if(saveNotes(code, notes)) renderNotesContent();
 }
-
 function deleteSession(noteIdx){
   const code = activeNotesCode;
   const notes = loadNotes(code);
   if(!notes[noteIdx]) return;
-  const confirmMsg = `Delete this note?\n\nSession ${notes[noteIdx].session} · ${fmtNiceDate(notes[noteIdx].date)}\n\nThis cannot be undone.`;
-  if(!confirm(confirmMsg)) return;
+  if(!confirm(`Delete this note?\n\nSession ${notes[noteIdx].session} · ${fmtNiceDate(notes[noteIdx].date)}\n\nThis cannot be undone.`)) return;
   notes.splice(noteIdx, 1);
-  if(saveNotes(code, notes)){
-    renderNotesContent();
-  }
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  if(saveNotes(code, notes)) renderNotesContent();
 }
 
 function renderAddArea(){
-  const code = activeNotesCode;
-  const date = activeNotesDate;
-  const addArea = document.getElementById('notes-add');
-
-  // Compute session number and next class
+  const code = activeNotesCode, date = activeNotesDate;
   const session = findSessionNumber(code, date);
   const nextDate = findNextClassDate(code, date);
   const col = COLORS[code] || {color:'var(--fob)'};
-
-  addArea.innerHTML = `
+  document.getElementById('notes-add').innerHTML = `
     <div class="add-form-label">Today · Session ${session}</div>
-    <div class="add-form-meta" style="color:${col.color || 'var(--fob)'}">
+    <div class="add-form-meta" style="color:${col.color}">
       ${fmtNiceDate(date)}${nextDate ? ` &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">Next ${code}: ${fmtNiceDate(nextDate)} (${fmtDaysFromNow(nextDate)})</span>` : ' &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">No more classes scheduled</span>'}
     </div>
-    <button class="add-trigger-btn" id="add-trigger" onclick="showAddForm()">+ Add note for this session</button>
+    <button class="add-trigger-btn" onclick="showAddForm()">+ Add note for this session</button>
   `;
 }
-
 function showAddForm(){
-  const code = activeNotesCode;
-  const date = activeNotesDate;
+  const code = activeNotesCode, date = activeNotesDate;
   const session = findSessionNumber(code, date);
   const nextDate = findNextClassDate(code, date);
   const col = COLORS[code] || {color:'var(--fob)'};
-
-  const addArea = document.getElementById('notes-add');
-  addArea.innerHTML = `
+  document.getElementById('notes-add').innerHTML = `
     <div class="add-form-label">New entry · Session ${session}</div>
-    <div class="add-form-meta" style="color:${col.color || 'var(--fob)'}">
+    <div class="add-form-meta" style="color:${col.color}">
       ${fmtNiceDate(date)}${nextDate ? ` &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">Prep for next class: ${fmtNiceDate(nextDate)} (${fmtDaysFromNow(nextDate)})</span>` : ''}
     </div>
-    <textarea class="add-form-textarea" id="add-textarea" placeholder="Today's classwork, homework, prep for next session..." style="border-color:${col.color || 'var(--border2)'}"></textarea>
+    <textarea class="add-form-textarea" id="add-textarea" placeholder="Today's classwork, homework, prep for next session..." style="border-color:${col.color}"></textarea>
     <div class="add-form-row">
       <button class="add-cancel-btn" onclick="renderAddArea()">Cancel</button>
       <button class="add-save-btn" onclick="saveNewNote()">Save note</button>
-    </div>
-  `;
+    </div>`;
   setTimeout(() => document.getElementById('add-textarea').focus(), 50);
 }
-
 function saveNewNote(){
   const text = document.getElementById('add-textarea').value.trim();
   if(!text){ alert('Please type something before saving'); return; }
-  const code = activeNotesCode;
-  const date = activeNotesDate;
+  const code = activeNotesCode, date = activeNotesDate;
   const session = findSessionNumber(code, date);
   const notes = loadNotes(code);
-  notes.push({
-    session: session,
-    date: date,
-    text: text,
-    savedAt: Date.now()
-  });
-  if(saveNotes(code, notes)){
-    renderNotesContent();
-  }
+  notes.push({session, date, text, savedAt: Date.now()});
+  if(saveNotes(code, notes)) renderNotesContent();
 }
 
 // ─────────── INIT ───────────
-loadCSV();
+loadData();
 </script>
 </body>
 </html>
