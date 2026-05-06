@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CR-A3">
+<meta name="theme-color" content="#f5f5f0">
+<title>CR-A3 · PGP BL07 Term I</title>
+<style>
+:root {
+  --bg:#f5f5f0; --surface:#ffffff; --surface2:#efefea;
+  --border:rgba(0,0,0,0.08); --border2:rgba(0,0,0,0.14);
+  --text:#111111; --muted:#888888; --dim:#bbbbbb;
+  --cft:#5b4fcf; --cft-bg:#eeedfb; --cft-b:rgba(91,79,207,0.35);
+  --ome:#c94f2a; --ome-bg:#fdf0ec; --ome-b:rgba(201,79,42,0.35);
+  --dam:#1a6faa; --dam-bg:#e8f3fb; --dam-b:rgba(26,111,170,0.35);
+  --mppo:#b83d7e; --mppo-bg:#fceef6; --mppo-b:rgba(184,61,126,0.35);
+  --mm:#9a6a00; --mm-bg:#fdf6e3; --mm-b:rgba(154,106,0,0.35);
+  --efaac:#2a7a50; --efaac-bg:#e8f7ef; --efaac-b:rgba(42,122,80,0.35);
+  --fob:#555566; --fob-bg:#f0f0f4; --fob-b:rgba(85,85,102,0.35);
+  --exam:#b83232; --exam-bg:#fdeaea; --exam-b:rgba(184,50,50,0.35);
+  --ws:#6b3fb5; --ws-bg:#f2edfb; --ws-b:rgba(107,63,181,0.35);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--bg); color:var(--text); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; min-height:100vh; overflow-x:hidden; }
+.app { max-width:430px; margin:0 auto; padding:0 0 5rem; }
+
+header { padding:2.75rem 1.25rem 1.25rem; position:sticky; top:0; background:linear-gradient(to bottom,var(--bg) 85%,transparent); z-index:10; }
+.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.1rem; }
+.tag { font-size:10px; font-weight:500; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; }
+.class-badge { font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--cft); border:1.5px solid var(--cft-b); padding:4px 10px; border-radius:20px; background:var(--cft-bg); }
+.date-display { margin-bottom:1rem; }
+.date-day { font-size:24px; font-weight:700; line-height:1.15; letter-spacing:-0.02em; color:var(--text); }
+.date-year { font-size:12px; font-weight:400; color:var(--muted); margin-top:3px; }
+
+.sync-row { display:flex; justify-content:space-between; align-items:center; padding:0 1.25rem; margin-bottom:0.75rem; font-size:10px; color:var(--muted); }
+.sync-dot { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:6px; vertical-align:middle; background:var(--dim); transition:background 0.3s; }
+.sync-dot.ok { background:var(--efaac); }
+.sync-dot.err { background:var(--exam); }
+.sync-dot.loading { background:var(--mm); animation:pulse 1s ease-in-out infinite; }
+.refresh-btn { background:none; border:1px solid var(--border2); color:var(--muted); font-size:10px; font-family:inherit; padding:3px 10px; border-radius:12px; cursor:pointer; letter-spacing:0.05em; }
+.refresh-btn:active { background:var(--surface2); }
+
+.tab-bar { display:flex; gap:6px; padding:0 1.25rem; margin-bottom:1.25rem; }
+.tab-btn { flex:1; height:36px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); font-family:inherit; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.tab-btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+.tab-btn:active { transform:scale(0.97); }
+
+.day-nav { display:flex; gap:6px; align-items:center; }
+.nav-btn { background:var(--surface); border:1px solid var(--border2); color:var(--text); font-size:15px; width:40px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.nav-btn:active { background:var(--surface2); transform:scale(0.96); }
+.today-btn { flex:1; background:var(--surface); border:1px solid var(--border2); color:var(--muted); font-family:inherit; font-size:11px; font-weight:500; letter-spacing:0.09em; height:36px; border-radius:8px; cursor:pointer; text-transform:uppercase; }
+.today-btn:active { background:var(--surface2); }
+
+.progress-wrap { padding:0 1.25rem; margin-bottom:1.25rem; }
+.progress-label { display:flex; justify-content:space-between; font-size:10px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.progress-track { height:3px; background:var(--surface2); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--cft),var(--efaac)); border-radius:2px; transition:width 0.6s ease; }
+
+.stats-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:0 1.25rem; margin-bottom:1.5rem; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 8px; text-align:center; }
+.stat-val { font-size:18px; font-weight:700; letter-spacing:-0.02em; line-height:1; }
+.stat-val.small { font-size:11px; padding-top:3px; line-height:1.4; letter-spacing:0; font-weight:600; }
+.stat-label { font-size:9px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:4px; }
+
+.schedule { padding:0 1.25rem; }
+.section-label { font-size:10px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.75rem; }
+.slot { display:flex; gap:10px; margin-bottom:7px; align-items:stretch; }
+.time-col { width:68px; flex-shrink:0; display:flex; flex-direction:column; align-items:flex-end; padding-top:11px; }
+.time-start { font-size:11px; font-weight:600; color:var(--muted); line-height:1; }
+.time-ampm { font-size:9px; font-weight:500; color:var(--dim); line-height:1; margin-top:1px; }
+.time-end { font-size:10px; color:var(--dim); margin-top:5px; line-height:1; }
+.time-end-ampm { font-size:9px; color:var(--dim); line-height:1; margin-top:1px; }
+.class-card { flex:1; border-radius:10px; padding:11px 13px; border-left:3px solid transparent; position:relative; animation:slideIn 0.2s ease both; }
+@keyframes slideIn { from{opacity:0;transform:translateX(6px)} to{opacity:1;transform:translateX(0)} }
+.class-code { font-size:13px; font-weight:700; line-height:1; }
+.class-full { font-size:11px; font-weight:400; margin-top:3px; line-height:1.35; opacity:0.75; }
+.class-faculty { font-size:10px; font-weight:500; margin-top:5px; opacity:0.55; }
+.lunch-card { flex:1; border-radius:10px; padding:10px 13px; background:var(--surface); border:1px dashed var(--border2); display:flex; align-items:center; gap:8px; }
+.lunch-dot { width:5px; height:5px; border-radius:50%; background:var(--dim); flex-shrink:0; }
+.lunch-text { font-size:11px; font-weight:500; color:var(--muted); letter-spacing:0.03em; text-transform:uppercase; }
+.workshop-card { flex:1; border-radius:10px; padding:11px 13px; background:var(--ws-bg); border-left:3px solid var(--ws); }
+.workshop-label { font-size:9px; font-weight:700; color:var(--ws); text-transform:uppercase; letter-spacing:0.1em; }
+.workshop-title { font-size:12px; font-weight:600; color:var(--ws); margin-top:3px; line-height:1.3; }
+.workshop-sub { font-size:10px; color:var(--ws); opacity:0.6; margin-top:4px; }
+.exam-card { flex:1; border-radius:10px; padding:13px 14px; background:var(--exam-bg); border-left:3px solid var(--exam); }
+.exam-text { font-size:14px; font-weight:700; color:var(--exam); }
+.exam-sub { font-size:10px; font-weight:500; color:var(--exam); opacity:0.6; margin-top:4px; text-transform:uppercase; letter-spacing:0.08em; }
+.special-card { flex:1; border-radius:10px; padding:11px 13px; background:var(--fob-bg); border-left:3px solid var(--fob-b); }
+.special-text { font-size:13px; font-weight:600; color:var(--fob); }
+.now-badge { font-size:9px; font-weight:700; letter-spacing:0.1em; background:#111; color:#fff; padding:2px 7px; border-radius:4px; text-transform:uppercase; position:absolute; top:10px; right:10px; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.no-class { text-align:center; padding:3rem 0; }
+.no-class-icon { font-size:28px; margin-bottom:0.75rem; color:var(--dim); }
+.no-class-text { font-size:14px; font-weight:500; color:var(--muted); }
+.no-class-sub { font-size:11px; color:var(--dim); margin-top:5px; }
+
+.legend { padding:1.25rem 1.25rem 0; display:flex; flex-wrap:wrap; gap:6px; }
+.leg { display:flex; align-items:center; gap:5px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:4px 9px; }
+.leg-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.leg-text { font-size:10px; font-weight:500; color:var(--muted); }
+
+#holidays-view { padding:0 1.25rem; }
+.holidays-header { margin-bottom:1.25rem; }
+.holidays-title { font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--text); }
+.holidays-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+.holiday-month-label { font-size:10px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:0.12em; margin:1.25rem 0 0.6rem; }
+.holiday-item { display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:11px 13px; margin-bottom:7px; animation:slideIn 0.2s ease both; }
+.holiday-date-box { width:42px; flex-shrink:0; text-align:center; }
+.holiday-dd { font-size:20px; font-weight:700; line-height:1; color:var(--text); letter-spacing:-0.02em; }
+.holiday-dow { font-size:9px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:2px; }
+.holiday-divider { width:1px; height:32px; background:var(--border2); flex-shrink:0; }
+.holiday-info { flex:1; }
+.holiday-name { font-size:13px; font-weight:600; color:var(--text); line-height:1.2; }
+.holiday-type { font-size:10px; font-weight:500; margin-top:3px; padding:2px 7px; border-radius:10px; display:inline-block; }
+.type-national { background:var(--exam-bg); color:var(--exam); }
+.type-free { background:var(--dam-bg); color:var(--dam); }
+.type-weekend { background:var(--fob-bg); color:var(--fob); }
+.holiday-count-badge { background:var(--efaac-bg); border:1px solid var(--efaac-b); color:var(--efaac); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; display:inline-block; margin-top:0.75rem; }
+
+.loading-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 1.25rem; gap:1rem; }
+.spinner { width:28px; height:28px; border:2px solid var(--surface2); border-top-color:var(--cft); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:13px; color:var(--muted); }
+.error-screen { padding:2rem 1.25rem; text-align:center; }
+.error-title { font-size:14px; font-weight:600; color:var(--exam); margin-bottom:6px; }
+.error-msg { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:1rem; }
+.retry-btn { background:var(--cft); color:white; border:none; padding:10px 20px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; }
+.cached-banner { background:var(--mm-bg); border:1px solid var(--mm-b); color:var(--mm); border-radius:8px; padding:8px 12px; margin:0 1.25rem 1rem; font-size:11px; text-align:center; }
+
+.slot-anim-0{animation-delay:0.00s} .slot-anim-1{animation-delay:0.04s} .slot-anim-2{animation-delay:0.08s}
+.slot-anim-3{animation-delay:0.12s} .slot-anim-4{animation-delay:0.16s} .slot-anim-5{animation-delay:0.20s}
+.slot-anim-6{animation-delay:0.24s} .slot-anim-7{animation-delay:0.28s}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="header-top">
+      <span class="tag">PGP BL07 · Term I</span>
+      <span class="class-badge">CR-A3</span>
+    </div>
+    <div class="date-display" id="header-date">
+      <div class="date-day" id="date-day">—</div>
+      <div class="date-year" id="date-year">—</div>
+    </div>
+    <div class="day-nav" id="day-nav-row">
+      <button class="nav-btn" onclick="changeDay(-1)">←</button>
+      <button class="today-btn" onclick="goToday()">↺ Today</button>
+      <button class="nav-btn" onclick="changeDay(1)">→</button>
+    </div>
+  </header>
+
+  <div class="sync-row">
+    <div><span class="sync-dot loading" id="sync-dot"></span><span id="sync-text">Syncing…</span></div>
+    <button class="refresh-btn" onclick="loadCSV(true)">↻ Refresh</button>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-schedule" onclick="switchTab('schedule')">Schedule</button>
+    <button class="tab-btn" id="tab-holidays" onclick="switchTab('holidays')">Holidays</button>
+  </div>
+
+  <div id="cached-banner" class="cached-banner" style="display:none"></div>
+
+  <div id="main-content">
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading live schedule…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────── CONFIG ───────────
+const SECTION        = 'CR-A3';
+const SECTION_SUFFIX = 'A';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYswdABqsqnLETAh0TKMsRsescez0I_II1SrZw2nyhpGco-7HyeZ5NhsZ7h2lE1GZGaj9lRD2HiTLR/pub?gid=0&single=true&output=csv';
+const CACHE_KEY  = 'pgp-bl07-csv-cache';
+const CACHE_TIME_KEY = 'pgp-bl07-csv-cache-time';
+
+// ─────────── STATIC REFS ───────────
+const COLORS = {
+  'CFT-I': {color:'var(--cft)', bg:'var(--cft-bg)', border:'var(--cft-b)'},
+  'OME':   {color:'var(--ome)', bg:'var(--ome-bg)', border:'var(--ome-b)'},
+  'DAM':   {color:'var(--dam)', bg:'var(--dam-bg)', border:'var(--dam-b)'},
+  'MPPO':  {color:'var(--mppo)',bg:'var(--mppo-bg)',border:'var(--mppo-b)'},
+  'MM':    {color:'var(--mm)',  bg:'var(--mm-bg)',  border:'var(--mm-b)'},
+  'EFAAC': {color:'var(--efaac)',bg:'var(--efaac-bg)',border:'var(--efaac-b)'},
+  'FOB':   {color:'var(--fob)', bg:'var(--fob-bg)', border:'var(--fob-b)'},
+};
+const FULL = {
+  'CFT-I':'Communication for Transformation-I',
+  'OME':'Organization & Market Economics',
+  'DAM':'Data Analysis & Modelling',
+  'MPPO':'Managing People & Performance in Organizations',
+  'MM':'Marketing Management',
+  'EFAAC':'Essentials of Financial Accounting, Analysis & Costing',
+  'FOB':'Foundations of Business',
+};
+const FACULTY = {
+  'CFT-I':'Prof. Deepa Sethi',
+  'OME':'Prof. Shubhasis Dey',
+  'DAM':'Prof. Arnab Adhikari',
+  'MPPO':'Prof. Roopak Kumar Gupta',
+  'MM':'Prof. Atanu Adhikari',
+  'FOB':'Prof. Anjana Karumathil',
+};
+const NATIONAL = {
+  '2026-05-01':'Labour Day',
+  '2026-05-09':'Rabindra Jayanti',
+  '2026-05-24':'Eid al-Adha (Bakrid)',
+};
+
+// ─────────── STATE ───────────
+let SCHEDULE = [];
+let MAP = {};
+let DATES = [];
+let TERM_S = '2026-04-22';
+let TERM_E = '2026-06-05';
+let idx = 0;
+let currentTab = 'schedule';
+
+// ─────────── CSV PARSING ───────────
+function parseCSV(text) {
+  // Robust CSV parser handling quoted fields, escaped quotes, newlines in quotes
+  const rows=[]; let row=[]; let cell=''; let inQ=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i], n=text[i+1];
+    if(inQ){
+      if(c==='"' && n==='"'){ cell+='"'; i++; }
+      else if(c==='"'){ inQ=false; }
+      else { cell+=c; }
+    } else {
+      if(c==='"'){ inQ=true; }
+      else if(c===','){ row.push(cell); cell=''; }
+      else if(c==='\r'){ /* skip */ }
+      else if(c==='\n'){ row.push(cell); rows.push(row); row=[]; cell=''; }
+      else { cell+=c; }
+    }
+  }
+  if(cell.length>0 || row.length>0){ row.push(cell); rows.push(row); }
+  return rows;
+}
+
+// ─────────── DATE PARSING ───────────
+const MONTH_MAP = {
+  'january':0,'february':1,'march':2,'april':3,'may':4,'june':5,
+  'july':6,'august':7,'september':8,'october':9,'november':10,'december':11,
+  'jan':0,'feb':1,'mar':2,'apr':3,'jun':5,'jul':6,'aug':7,'sep':8,'sept':8,'oct':9,'nov':10,'dec':11,
+};
+
+function parseDateCell(s) {
+  // Expected format: "Wednesday, 22 April, 2026" or "Friday, 1 May, 2026" etc.
+  if(!s) return null;
+  s = s.trim();
+  if(!s) return null;
+  // Remove day-of-week prefix if present (anything before the first comma)
+  const parts = s.split(',').map(p => p.trim()).filter(Boolean);
+  // parts could be ["Wednesday", "22 April", "2026"] OR ["22 April 2026"] etc.
+  let day, month, year;
+  if(parts.length >= 3){
+    const dm = parts[1].split(/\s+/);
+    day = parseInt(dm[0], 10);
+    month = MONTH_MAP[dm[1]?.toLowerCase()];
+    year = parseInt(parts[2], 10);
+  } else if(parts.length === 2){
+    // "22 April" + "2026"
+    const dm = parts[0].split(/\s+/);
+    day = parseInt(dm[0], 10);
+    month = MONTH_MAP[dm[1]?.toLowerCase()];
+    year = parseInt(parts[1], 10);
+  } else {
+    // Single token like "22 April 2026"
+    const tok = s.split(/\s+/);
+    day = parseInt(tok[0], 10);
+    month = MONTH_MAP[tok[1]?.toLowerCase()];
+    year = parseInt(tok[2], 10);
+  }
+  if(isNaN(day) || month === undefined || isNaN(year)) return null;
+  const mm = String(month + 1).padStart(2, '0');
+  const dd = String(day).padStart(2, '0');
+  return `${year}-${mm}-${dd}`;
+}
+
+// ─────────── TIME PARSING ───────────
+function normalizeTime(s) {
+  // Input: "9.15 -10.30" or "10.45-12.00" or similar → "9.15-10.30"
+  if(!s) return '';
+  return s.replace(/\s+/g,'').trim();
+}
+
+function parseScheduleCSV(rows) {
+  // Detect header row — find row containing "Time" in column B and section headers in C/D
+  let headerIdx = -1;
+  let colA3 = -1, colA4 = -1;
+  for(let i=0;i<Math.min(rows.length,20);i++){
+    const r = rows[i].map(c => (c||'').trim());
+    if(r.some(c => c.toLowerCase() === 'time')){
+      headerIdx = i;
+      for(let j=0;j<r.length;j++){
+        if(r[j] === 'CR-A3') colA3 = j;
+        if(r[j] === 'CR-A4') colA4 = j;
+      }
+      break;
+    }
+  }
+  if(headerIdx === -1){
+    // fallback to known positions
+    headerIdx = 0;
+    colA3 = 2; colA4 = 3;
+  }
+  const colSection = SECTION === 'CR-A3' ? colA3 : colA4;
+  if(colSection === -1){
+    throw new Error('Could not find ' + SECTION + ' column in sheet');
+  }
+
+  // Track "current date" so merged-cell rows (blank date col) inherit
+  let currentDate = null;
+  const schedule = [];
+  const dateToSlots = {};
+
+  for(let i = headerIdx + 1; i < rows.length; i++){
+    const r = rows[i];
+    if(!r || !r.length) continue;
+
+    const dateCell = (r[0] || '').trim();
+    const timeCell = (r[1] || '').trim();
+    const cellVal  = (r[colSection] || '').trim();
+
+    if(dateCell){
+      const parsed = parseDateCell(dateCell);
+      if(parsed) currentDate = parsed;
+    }
+
+    // Detect "End Term Exam" or similar special full-row events (time cell may contain it)
+    if(timeCell && /end term exam/i.test(timeCell)){
+      if(!currentDate && dateCell){ currentDate = parseDateCell(dateCell); }
+      if(currentDate){
+        if(!dateToSlots[currentDate]) dateToSlots[currentDate] = [];
+        dateToSlots[currentDate].push({t:'All day', c:'__EXAM__'});
+      }
+      continue;
+    }
+
+    if(!currentDate || !timeCell) continue;
+
+    const t = normalizeTime(timeCell);
+    if(!t) continue;
+
+    // Classify cell content
+    let slot = null;
+    if(/^lunch/i.test(timeCell.toLowerCase().trim()) || /lunch break/i.test(cellVal)){
+      slot = {t, c:'__LUNCH__'};
+    } else if(!cellVal){
+      continue; // empty slot — skip
+    } else if(/workshop/i.test(cellVal)){
+      // Preserve original workshop text; render as __WORKSHOP__
+      slot = {t, c:'__WORKSHOP__' + cellVal};
+    } else if(/library\s*interaction/i.test(cellVal)){
+      slot = {t, c:'__SPECIAL__Library Interaction'};
+    } else if(/end term exam/i.test(cellVal)){
+      slot = {t:'All day', c:'__EXAM__'};
+    } else {
+      slot = {t, c:cellVal};
+    }
+
+    if(slot){
+      if(!dateToSlots[currentDate]) dateToSlots[currentDate] = [];
+      // Also detect lunch by time convention 13.30-14.30 even if cell empty — but only insert once per day
+      dateToSlots[currentDate].push(slot);
+    }
+  }
+
+  // Ensure every scheduled day with non-lunch content has a lunch row if time 13.30-14.30 is missing but other slots exist after 13.30
+  // (Sheet typically has a lunch row; skip auto-insertion to avoid duplicates)
+
+  // Build ordered array
+  const sortedDates = Object.keys(dateToSlots).sort();
+  sortedDates.forEach(d => {
+    // Sort slots by start time
+    dateToSlots[d].sort((a,b) => {
+      const ta = parseTm((a.t.split('-')[0] || '0').trim());
+      const tb = parseTm((b.t.split('-')[0] || '0').trim());
+      return ta - tb;
+    });
+    schedule.push({d, slots:dateToSlots[d]});
+  });
+
+  return schedule;
+}
+
+// ─────────── TIME HELPERS ───────────
+function parseTm(s){const[h,m]=(s||'0.0').split('.').map(Number);return (h||0)*60+(m||0);}
+function to12(s){
+  const[hStr,mStr]=(s||'0.0').split('.');
+  let h=parseInt(hStr,10)||0, m=parseInt(mStr||'0',10)||0;
+  const ampm=h<12?'AM':'PM';
+  if(h===0) h=12; else if(h>12) h-=12;
+  return{time:`${h}:${String(m).padStart(2,'0')}`,ampm};
+}
+function fmtSlot(t){
+  if(t==='All day') return {t1:'All',a1:'',t2:'Day',a2:''};
+  const p=t.split('-'); if(p.length<2) return {t1:t,a1:'',t2:'',a2:''};
+  const s=to12(p[0].trim()), e=to12(p[1].trim());
+  return {t1:s.time,a1:s.ampm,t2:e.time,a2:e.ampm};
+}
+function isNow(t){
+  if(t==='All day') return true;
+  const p=t.split('-'); if(p.length<2) return false;
+  const now=new Date(), cur=now.getHours()*60+now.getMinutes();
+  try{ return cur>=parseTm(p[0].trim()) && cur<=parseTm(p[1].trim()); }catch(e){ return false; }
+}
+function getCode(c){
+  if(!c||c.startsWith('__')) return null;
+  const base=c.split('(')[0].trim();
+  return base.replace(/-[AB]$/i,'').trim();
+}
+function getFaculty(c){
+  const code=getCode(c); if(!code) return '';
+  if(code==='EFAAC'){
+    const m=c.match(/\(([^)]+)\)/);
+    if(m){
+      if(m[1].toLowerCase().includes('jijo')) return 'Prof. Jijo Lukose';
+      if(m[1].toLowerCase().includes('qambar')) return 'Prof. Qambar Abidi';
+      return m[1];
+    }
+    return 'Prof. Jijo Lukose';
+  }
+  return FACULTY[code] || '';
+}
+function toDS(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
+
+// ─────────── STATS / RANGES ───────────
+function computeTermRange(){
+  if(DATES.length === 0) return;
+  TERM_S = DATES[0];
+  TERM_E = DATES[DATES.length-1];
+}
+function todayIdx(){ const t=toDS(new Date()); const i=DATES.findIndex(d=>d>=t); return i===-1?DATES.length-1:i; }
+function termPct(){ const n=Date.now(),s=new Date(TERM_S).getTime(),e=new Date(TERM_E).getTime(); if(e<=s) return 0; return Math.max(0,Math.min(100,Math.round((n-s)/(e-s)*100))); }
+function daysLeft(){ const t=new Date();t.setHours(0,0,0,0); const e=new Date(TERM_E);e.setHours(0,0,0,0); return Math.max(0,Math.ceil((e-t)/86400000)); }
+function countMins(slots){
+  let m=0;
+  slots.forEach(s=>{
+    if(s.c.startsWith('__')) return;
+    const p=s.t.split('-'); if(p.length<2) return;
+    try{ m+=parseTm(p[1].trim())-parseTm(p[0].trim()); }catch(e){}
+  });
+  return m;
+}
+function fmtMins(m){
+  const h=Math.floor(m/60), mn=m%60;
+  if(h===0) return `${mn} mins`;
+  if(mn===0) return `${h} hrs`;
+  return `${h} hrs ${mn} mins`;
+}
+
+// ─────────── RENDER ───────────
+function renderScheduleShell(){
+  document.getElementById('main-content').innerHTML = `
+    <div id="schedule-view">
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Term Progress</span><span id="progress-pct">—</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="stat-classes" style="color:var(--cft)">—</div><div class="stat-label">Classes</div></div>
+        <div class="stat-card"><div class="stat-val small" id="stat-hours" style="color:var(--dam)">—</div><div class="stat-label">Today</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-days" style="color:var(--mm)">—</div><div class="stat-label">Days Left</div></div>
+      </div>
+      <div class="schedule"><div class="section-label">Schedule</div><div id="schedule-body"></div></div>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:var(--cft)"></div><span class="leg-text">CFT-I</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--ome)"></div><span class="leg-text">OME</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--dam)"></div><span class="leg-text">DAM</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--mppo)"></div><span class="leg-text">MPPO</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--mm)"></div><span class="leg-text">MM</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--efaac)"></div><span class="leg-text">EFAAC</span></div>
+        <div class="leg"><div class="leg-dot" style="background:var(--fob)"></div><span class="leg-text">FOB</span></div>
+      </div>
+    </div>
+    <div id="holidays-view" style="display:none">
+      <div class="holidays-header">
+        <div class="holidays-title">Free Days</div>
+        <div class="holidays-sub">Holidays &amp; no-class days in Term I</div>
+      </div>
+      <div id="holidays-body"></div>
+    </div>
+  `;
+}
+
+function render(){
+  if(!DATES.length){
+    document.getElementById('main-content').innerHTML = `<div class="error-screen"><div class="error-title">No schedule data</div><div class="error-msg">The sheet returned no rows. Check that the sheet is published and has data.</div></div>`;
+    return;
+  }
+  if(!document.getElementById('schedule-view')) renderScheduleShell();
+
+  const ds = DATES[idx];
+  const[y,mo,d]=ds.split('-').map(Number);
+  const dt=new Date(y,mo-1,d);
+  const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  document.getElementById('date-day').textContent = `${DAYS[dt.getDay()]}, ${String(d).padStart(2,'0')} ${MONTHS[mo-1]}`;
+  document.getElementById('date-year').textContent = `${y}`;
+
+  const pct = termPct();
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const slots = MAP[ds] || [];
+  const classes = slots.filter(s=>!s.c.startsWith('__')).length;
+  const mins = countMins(slots);
+  document.getElementById('stat-classes').textContent = classes;
+  document.getElementById('stat-hours').textContent = mins>0 ? fmtMins(mins) : '—';
+  document.getElementById('stat-days').textContent = daysLeft();
+
+  if(slots.length === 0){
+    document.getElementById('schedule-body').innerHTML = `<div class="no-class"><div class="no-class-icon">—</div><div class="no-class-text">No classes today</div><div class="no-class-sub">Free day · rest or revise</div></div>`;
+    return;
+  }
+
+  let html='';
+  slots.forEach((slot,i)=>{
+    const{t1,a1,t2,a2}=fmtSlot(slot.t);
+    const anim=`slot-anim-${Math.min(i,7)}`;
+    const now=isNow(slot.t);
+
+    if(slot.c==='__LUNCH__'){
+      html += `<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="lunch-card"><div class="lunch-dot"></div><div class="lunch-text">Lunch Break</div></div>
+      </div>`;
+    } else if(slot.c.startsWith('__WORKSHOP__')){
+      const det = slot.c.replace('__WORKSHOP__','').split('\n');
+      html += `<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="workshop-card"><div class="workshop-label">Workshop</div><div class="workshop-title">${det[0]||''}</div>${det[1]?`<div class="workshop-sub">${det[1]}</div>`:''}</div>
+      </div>`;
+    } else if(slot.c==='__EXAM__'){
+      html += `<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">All</div><div class="time-end">Day</div></div>
+        <div class="exam-card"><div class="exam-text">End Term Exam</div><div class="exam-sub">PGP BL07 · Term I</div></div>
+      </div>`;
+    } else if(slot.c.startsWith('__SPECIAL__')){
+      const label = slot.c.replace('__SPECIAL__','');
+      html += `<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="special-card"><div class="special-text">${label}</div></div>
+      </div>`;
+    } else {
+      const code = getCode(slot.c);
+      const col = COLORS[code] || {color:'var(--fob)',bg:'var(--fob-bg)',border:'var(--fob-b)'};
+      const full = FULL[code] || code;
+      const fac = getFaculty(slot.c);
+      html += `<div class="slot ${anim}">
+        <div class="time-col"><div class="time-start">${t1}</div><div class="time-ampm">${a1}</div><div class="time-end">${t2}</div><div class="time-end-ampm">${a2}</div></div>
+        <div class="class-card" style="background:${col.bg};border-left-color:${col.border};color:${col.color};">
+          <div class="class-code">${code}</div>
+          <div class="class-full">${full}</div>
+          ${fac?`<div class="class-faculty">${fac}</div>`:''}
+          ${now?'<span class="now-badge">Now</span>':''}
+        </div>
+      </div>`;
+    }
+  });
+  document.getElementById('schedule-body').innerHTML = html;
+}
+
+function renderHolidays(){
+  const DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const scheduled = new Set(DATES);
+  const free = [];
+  const today = toDS(new Date());
+  for(let dt=new Date(TERM_S); toDS(dt)<=TERM_E; dt.setDate(dt.getDate()+1)){
+    const ds = toDS(new Date(dt));
+    if(!scheduled.has(ds)) free.push(new Date(dt));
+  }
+  const byMonth = {};
+  free.forEach(dt => {
+    const k = `${dt.getFullYear()}-${dt.getMonth()}`;
+    if(!byMonth[k]) byMonth[k] = {label:`${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`, days:[]};
+    byMonth[k].days.push(dt);
+  });
+  let html='';
+  Object.values(byMonth).forEach(g => {
+    html += `<div class="holiday-month-label">${g.label}</div>`;
+    g.days.forEach((dt,i) => {
+      const ds=toDS(dt), dow=dt.getDay(), dd=dt.getDate();
+      const past = ds<today;
+      const isNH = NATIONAL[ds];
+      const isWk = dow===0 || dow===6;
+      const tc = isNH?'type-national':isWk?'type-weekend':'type-free';
+      const name = isNH?NATIONAL[ds]:isWk?(dow===0?'Sunday':'Saturday'):'Free Day — No Classes';
+      const tl = isNH?'Public Holiday':isWk?(dow===0?'Sunday':'Saturday'):'No Classes';
+      html += `<div class="holiday-item slot-anim-${Math.min(i,7)}" style="${past?'opacity:0.45':''}">
+        <div class="holiday-date-box"><div class="holiday-dd">${String(dd).padStart(2,'0')}</div><div class="holiday-dow">${DOWS[dow]}</div></div>
+        <div class="holiday-divider"></div>
+        <div class="holiday-info"><div class="holiday-name">${name}</div><span class="holiday-type ${tc}">${tl}</span></div>
+      </div>`;
+    });
+  });
+  html += `<div style="padding:0.75rem 0 0.5rem"><span class="holiday-count-badge">${free.length} free days in Term I</span></div>`;
+  document.getElementById('holidays-body').innerHTML = html;
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  document.getElementById('tab-schedule').classList.toggle('active', tab==='schedule');
+  document.getElementById('tab-holidays').classList.toggle('active', tab==='holidays');
+  const sv = document.getElementById('schedule-view');
+  const hv = document.getElementById('holidays-view');
+  if(sv) sv.style.display = tab==='schedule' ? '' : 'none';
+  if(hv) hv.style.display = tab==='holidays' ? '' : 'none';
+  document.getElementById('header-date').style.display = tab==='schedule' ? '' : 'none';
+  document.getElementById('day-nav-row').style.display = tab==='schedule' ? '' : 'none';
+  if(tab==='holidays' && DATES.length) renderHolidays();
+}
+
+function changeDay(dir){ idx=Math.max(0,Math.min(DATES.length-1,idx+dir)); render(); }
+function goToday(){ idx=todayIdx(); render(); }
+
+// ─────────── SYNC STATUS ───────────
+function setSyncStatus(state, text){
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-text');
+  dot.className = 'sync-dot ' + state;
+  txt.textContent = text;
+}
+function fmtTimeAgo(ms){
+  const s = Math.floor((Date.now()-ms)/1000);
+  if(s<60) return 'just now';
+  if(s<3600) return `${Math.floor(s/60)}m ago`;
+  if(s<86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+
+// ─────────── LOAD CSV ───────────
+async function loadCSV(forceReload=false){
+  setSyncStatus('loading','Syncing…');
+  document.getElementById('cached-banner').style.display='none';
+
+  // Try network
+  try {
+    const url = CSV_URL + '&_t=' + Date.now(); // cache-bust
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text = await res.text();
+    if(!text || text.length < 50) throw new Error('Empty response');
+
+    const rows = parseCSV(text);
+    const schedule = parseScheduleCSV(rows);
+    if(!schedule.length) throw new Error('No schedule rows parsed');
+
+    // Cache
+    try { localStorage.setItem(CACHE_KEY, text); localStorage.setItem(CACHE_TIME_KEY, String(Date.now())); } catch(e) {}
+
+    SCHEDULE = schedule;
+    MAP = {}; SCHEDULE.forEach(d => MAP[d.d] = d.slots);
+    DATES = SCHEDULE.map(d => d.d);
+    computeTermRange();
+    idx = todayIdx();
+
+    setSyncStatus('ok', 'Live · just synced');
+    renderScheduleShell();
+    if(currentTab==='holidays'){ switchTab('holidays'); } else { render(); }
+    return;
+  } catch(err){
+    console.warn('CSV fetch failed:', err);
+  }
+
+  // Fallback to cache
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = parseInt(localStorage.getItem(CACHE_TIME_KEY)||'0',10);
+    if(cached){
+      const rows = parseCSV(cached);
+      const schedule = parseScheduleCSV(rows);
+      if(schedule.length){
+        SCHEDULE = schedule;
+        MAP = {}; SCHEDULE.forEach(d => MAP[d.d] = d.slots);
+        DATES = SCHEDULE.map(d => d.d);
+        computeTermRange();
+        idx = todayIdx();
+
+        setSyncStatus('err', `Offline · cached ${fmtTimeAgo(cachedTime)}`);
+        document.getElementById('cached-banner').style.display='block';
+        document.getElementById('cached-banner').textContent = `⚠ Showing cached data from ${fmtTimeAgo(cachedTime)}. Live sync failed — check connection.`;
+        renderScheduleShell();
+        if(currentTab==='holidays'){ switchTab('holidays'); } else { render(); }
+        return;
+      }
+    }
+  } catch(e){ console.warn('Cache load failed:', e); }
+
+  // Nothing worked
+  setSyncStatus('err','Sync failed');
+  document.getElementById('main-content').innerHTML = `
+    <div class="error-screen">
+      <div class="error-title">Couldn't load schedule</div>
+      <div class="error-msg">Could not reach the Google Sheet and no cached copy is available. Check your internet connection and try again.</div>
+      <button class="retry-btn" onclick="loadCSV(true)">Retry</button>
+    </div>`;
+}
+
+loadCSV();
+</script>
+</body>
+</html>
